@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "F:\\Unity\\ModuleBank_Task_1\\BankAccount\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A731AD4A-7733-4547-9CCF-8F3FB4FAA7AD}|BankAccount.csproj|f:\\unity\\modulebank_task_1\\bankaccount\\services\\inmemoryaccountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A731AD4A-7733-4547-9CCF-8F3FB4FAA7AD}|BankAccount.csproj|solutionrelative:services\\inmemoryaccountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A731AD4A-7733-4547-9CCF-8F3FB4FAA7AD}|BankAccount.csproj|f:\\unity\\modulebank_task_1\\bankaccount\\features\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A731AD4A-7733-4547-9CCF-8F3FB4FAA7AD}|BankAccount.csproj|solutionrelative:features\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "F:\\Unity\\ModuleBank_Task_1\\BankAccount\\Features\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Features\\Controllers\\AccountController.cs",
+              "ToolTip": "F:\\Unity\\ModuleBank_Task_1\\BankAccount\\Features\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Features\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAHoAAAAAAAAAAAAuwIMAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T11:07:45.345Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "InMemoryAccountService.cs",
+              "DocumentMoniker": "F:\\Unity\\ModuleBank_Task_1\\BankAccount\\Services\\InMemoryAccountService.cs",
+              "RelativeDocumentMoniker": "Services\\InMemoryAccountService.cs",
+              "ToolTip": "F:\\Unity\\ModuleBank_Task_1\\BankAccount\\Services\\InMemoryAccountService.cs",
+              "RelativeToolTip": "Services\\InMemoryAccountService.cs",
+              "ViewState": "AgIAAGAAAAAAAAAAAAAmwGkAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T10:41:38.534Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
