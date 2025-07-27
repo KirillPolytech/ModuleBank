@@ -1,41 +1,17 @@
-﻿using BankAccount.Features.Accounts.Create;
-using BankAccount.Features.Models.Enums;
-using BankAccount.Services.Interfaces;
+﻿using BankAccount.Services.Interfaces;
 using FluentValidation;
 
 namespace BankAccount.Features.Accounts.GetAccount
 {
-    public class GetAccountQueryValidator : AbstractValidator<CreateAccountCommand>
+    public class GetAccountQueryValidator : AbstractValidator<GetAccountQuery>
     {
-        public GetAccountQueryValidator(IAccountService accountService)
+        public GetAccountQueryValidator(IClientVerificationService clientVerificationService)
         {
-            RuleFor(x => x.AccountDto.OwnerId)
+            RuleFor(x => x.AccountGuid)
                 .NotEmpty()
-                .MustAsync(async (ownerId, _) => await accountService.OwnerExistsAsync(ownerId))
+                .MustAsync(async (ownerId, cancellationToken) 
+                    => await clientVerificationService.OwnerExistsAsync(ownerId, cancellationToken))
                 .WithMessage("OwnerId must exist");
-
-            /*
-            RuleFor(x => x.AccountDto.Currency)
-                .NotEmpty()
-                .MustAsync(async (currency, _) => await accountService.IsCurrencySupportedAsync(currency))
-                .WithMessage("CurrencyType is not supported");
-            */
-
-            RuleFor(x => x.AccountDto.Type)
-                .IsInEnum();
-
-            RuleFor(x => x.AccountDto.InterestRate)
-                .Must((cmd, interest) =>
-                {
-                    if (cmd.AccountDto.Type is AccountType.Deposit or AccountType.Credit)
-                        return interest.HasValue;
-                    return interest == null;
-                })
-                .WithMessage("InterestRate must be set for Deposit and Credit accounts only");
-
-            RuleFor(x => x.AccountDto.OpenDate)
-                .LessThanOrEqualTo(DateTime.UtcNow)
-                .WithMessage("OpenDate cannot be in the future");
         }
     }
 }

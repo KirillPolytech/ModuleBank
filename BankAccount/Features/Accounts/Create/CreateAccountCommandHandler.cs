@@ -13,7 +13,7 @@ namespace BankAccount.Features.Accounts.Create
         {
             var account = request.AccountDto.Adapt<Account>();
 
-            await accountService.CreateAsync(account, cancellationToken);
+            await accountService.Create(account, cancellationToken);
             return request.AccountDto;
         }
     }

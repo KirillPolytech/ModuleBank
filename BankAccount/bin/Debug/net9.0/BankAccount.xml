@@ -48,12 +48,15 @@
         </member>
         <member name="M:BankAccount.Features.Controllers.AccountController.CheckAccountExists(System.Guid)">
             <summary>
-            Checks if an account exists for a given owner.
+            Checks whether an account with the specified GUID exists.
             </summary>
-            <param name="ownerId">The GUID of the account owner to check.</param>
+            <param name="accountGuid">The unique identifier of the account to check.</param>
             <returns>
-            Returns BadRequest if no account is found, otherwise returns Ok with the account data.
+            Returns <c>200 OK</c> with <c>true</c> if the account exists;
+            returns <c>400 Bad Request</c> if the account does not exist or the request is invalid.
             </returns>
+            <response code="200">Account exists</response>
+            <response code="400">Account does not exist or the request is invalid</response>
         </member>
         <member name="M:BankAccount.Features.Controllers.AccountController.PatchAccount(System.Guid,BankAccount.Features.Accounts.Patch.PatchAccountCommand)">
             <summary>
@@ -65,7 +68,7 @@
             Returns BadRequest if the patch operation failed, otherwise returns Ok with the result.
             </returns>
         </member>
-        <member name="M:BankAccount.Features.Controllers.AccountController.GetAccountStatement(System.Guid,System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+        <member name="M:BankAccount.Features.Controllers.AccountController.GetAccountStatement(System.Guid,System.DateTime,System.DateTime)">
             <summary>
             Retrieves the account statement for the specified account within the given date range.
             </summary>
@@ -77,6 +80,21 @@
             </returns>
             <response code="200">Returns the list of transactions for the specified period.</response>
             <response code="400">Returned when no transactions are found for the specified criteria.</response>
+        </member>
+        <member name="M:BankAccount.Features.Controllers.AccountController.Transfer(BankAccount.Features.Models.DTOs.TransferDto)">
+            <summary>
+            Performs a funds transfer between accounts.
+            </summary>
+            <param name="transferDto">Transfer details including amount, source, and destination accounts.</param>
+            <returns>Returns HTTP 200 OK with a boolean indicating success, or HTTP 400 Bad Request if the transfer fails.</returns>
+        </member>
+        <member name="M:BankAccount.Features.Controllers.AccountController.RegisterTransaction(System.Guid,BankAccount.Features.Models.DTOs.TransactionDto)">
+            <summary>
+            Registers a transaction for the specified account.
+            </summary>
+            <param name="accountId">The ID of the account for which the transaction is registered.</param>
+            <param name="transferDto">The transaction details to register.</param>
+            <returns>Returns HTTP 200 OK with a boolean indicating success, or HTTP 400 Bad Request if the registration fails.</returns>
         </member>
         <member name="T:BankAccount.Features.Models.DTOs.AccountDto">
             <summary>
@@ -116,6 +134,86 @@
         <member name="P:BankAccount.Features.Models.DTOs.AccountDto.OpenDate">
             <summary>
             Date when the account was opened.
+            </summary>
+        </member>
+        <member name="T:BankAccount.Features.Models.DTOs.PatchAccountDto">
+            <summary>
+            Data Transfer Object for partially updating account information.
+            </summary>
+        </member>
+        <member name="P:BankAccount.Features.Models.DTOs.PatchAccountDto.AccountGuid">
+            <summary>
+            Unique identifier of the account to be updated.
+            </summary>
+        </member>
+        <member name="P:BankAccount.Features.Models.DTOs.PatchAccountDto.Type">
+            <summary>
+            Optional new type of the account.
+            </summary>
+        </member>
+        <member name="P:BankAccount.Features.Models.DTOs.PatchAccountDto.Currency">
+            <summary>
+            Optional new currency type of the account.
+            </summary>
+        </member>
+        <member name="P:BankAccount.Features.Models.DTOs.PatchAccountDto.InterestRate">
+            <summary>
+            Optional new interest rate for the account.
+            </summary>
+        </member>
+        <member name="T:BankAccount.Features.Models.DTOs.TransactionDto">
+            <summary>
+            Data Transfer Object representing a financial transaction.
+            </summary>
+        </member>
+        <member name="P:BankAccount.Features.Models.DTOs.TransactionDto.AccountId">
+            <summary>
+            The unique identifier of the account associated with the transaction.
+            </summary>
+        </member>
+        <member name="P:BankAccount.Features.Models.DTOs.TransactionDto.Amount">
+            <summary>
+            The amount of the transaction.
+            </summary>
+        </member>
+        <member name="P:BankAccount.Features.Models.DTOs.TransactionDto.Currency">
+            <summary>
+            The currency type of the transaction amount.
+            </summary>
+        </member>
+        <member name="P:BankAccount.Features.Models.DTOs.TransactionDto.Type">
+            <summary>
+            The type of the transaction (e.g., debit, credit).
+            </summary>
+        </member>
+        <member name="P:BankAccount.Features.Models.DTOs.TransactionDto.Description">
+            <summary>
+            Optional description or note about the transaction.
+            </summary>
+        </member>
+        <member name="P:BankAccount.Features.Models.DTOs.TransactionDto.Timestamp">
+            <summary>
+            The date and time when the transaction occurred.
+            </summary>
+        </member>
+        <member name="T:BankAccount.Features.Models.DTOs.TransferDto">
+            <summary>
+            Data Transfer Object representing a funds transfer request.
+            </summary>
+        </member>
+        <member name="P:BankAccount.Features.Models.DTOs.TransferDto.From">
+            <summary>
+            The unique identifier of the account to transfer funds from.
+            </summary>
+        </member>
+        <member name="P:BankAccount.Features.Models.DTOs.TransferDto.To">
+            <summary>
+            The unique identifier of the account to transfer funds to.
+            </summary>
+        </member>
+        <member name="P:BankAccount.Features.Models.DTOs.TransferDto.Amount">
+            <summary>
+            The amount of money to transfer.
             </summary>
         </member>
     </members>

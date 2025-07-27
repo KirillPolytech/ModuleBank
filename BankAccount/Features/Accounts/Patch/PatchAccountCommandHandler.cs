@@ -1,15 +1,14 @@
-﻿using BankAccount.Features.Accounts.Delete;
-using BankAccount.Services.Interfaces;
+﻿using BankAccount.Services.Interfaces;
 using MediatR;
 
 namespace BankAccount.Features.Accounts.Patch
 {
     public class PatchAccountCommandHandler(IAccountService accountService)
-        : IRequestHandler<DeleteAccountCommand, bool>
+        : IRequestHandler<PatchAccountCommand, bool>
     {
-        public async Task<bool> Handle(DeleteAccountCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(PatchAccountCommand request, CancellationToken cancellationToken)
         {
-            return await accountService.Delete(request, cancellationToken);
+            return await accountService.Patch(request.AccountDto, cancellationToken);
         }
     }
 }

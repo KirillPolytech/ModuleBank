@@ -1,132 +1,140 @@
 ﻿using BankAccount.Features.Accounts.Delete;
 using BankAccount.Features.Accounts.GetStatement;
+using BankAccount.Features.Accounts.RegisterTransaction;
+using BankAccount.Features.Accounts.Transfer;
 using BankAccount.Features.Models;
+using BankAccount.Features.Models.DTOs;
 using BankAccount.Features.Models.Enums;
 using BankAccount.Services.Interfaces;
+using Mapster;
 
 namespace BankAccount.Services
 {
     public class InMemoryAccountService : IAccountService
     {
-        private readonly List<Account> _accounts = [];
-        private readonly HashSet<Guid> _owners = [];
+        private readonly IAccountRepository _accountRepository;
 
-        public InMemoryAccountService()
+        public InMemoryAccountService(IAccountRepository accountRepository)
         {
-            // Initialize with some default accounts.
-            _accounts.Add(new Account
+            _accountRepository = accountRepository;
+        }
+
+        public async Task<IReadOnlyList<Account>> GetAllByOwnerId(Guid ownerGuid, CancellationToken cancellationToken)
+        {
+            return await Task.FromResult(
+                _accountRepository
+                    .Accounts
+                    .Where(x => x.OwnerId == ownerGuid)
+                    .ToList());
+        }
+
+        public async Task<Account?> GetById(Guid accountGuid, CancellationToken cancellationToken)
+        {
+            return await Task.FromResult(_accountRepository.Accounts.FirstOrDefault(x => x.Id == accountGuid));
+        }
+
+        public async Task<bool> Create(Account request, CancellationToken cancellationToken)
+        {
+            _accountRepository.Accounts.Add(request);
+            return await Task.FromResult(true);
+        }
+
+        public async Task<bool> Patch(PatchAccountDto request, CancellationToken cancellationToken)
+        {
+            for (var i = 0; i < _accountRepository.Accounts.Count; i++)
             {
-                Id = Guid.NewGuid(),
-                Balance = 1000,
-                CurrencyType = CurrencyType.Rub,
-                Type = AccountType.Credit,
-                Transactions =
-                [
-                    new Transaction
-                    {
-                        Id = Guid.NewGuid(),
-                        AccountId = Guid.Parse("00000000-0000-0000-0000-000000000000"),
-                        Amount = 2500,
-                        Currency = CurrencyType.Rub,
-                        Type = TransactionType.Credit,
-                        Description = "Зачисление зарплаты",
-                        Timestamp = DateTime.UtcNow.AddDays(-5)
-                    },
+                if (_accountRepository.Accounts.ElementAt(i).Id != request.AccountGuid)
+                    continue;
 
-                    new Transaction
-                    {
-                        Id = Guid.NewGuid(),
-                        AccountId = Guid.Parse("00000000-0000-0000-0000-000000000000"),
-                        Amount = -700,
-                        Currency = CurrencyType.Rub,
-                        Type = TransactionType.Debit,
-                        Description = "Оплата ЖКХ",
-                        Timestamp = DateTime.UtcNow.AddDays(-4)
-                    },
+                if (request.InterestRate != null)
+                    _accountRepository.Accounts[i].InterestRate = request.InterestRate;
 
-                    new Transaction
-                    {
-                        Id = Guid.NewGuid(),
-                        AccountId = Guid.Parse("00000000-0000-0000-0000-000000000000"),
-                        Amount = -1200,
-                        Currency = CurrencyType.Rub,
-                        Type = TransactionType.Debit,
-                        Description = "Покупка в магазине",
-                        Timestamp = DateTime.UtcNow.AddDays(-2)
-                    },
+                if (request.Type != null)
+                    _accountRepository.Accounts[i].Type = (AccountType)request.Type;
+                return await Task.FromResult(true);
+            }
 
-                    new Transaction
-                    {
-                        Id = Guid.NewGuid(),
-                        AccountId = Guid.Parse("00000000-0000-0000-0000-000000000000"),
-                        Amount = 1000,
-                        Currency = CurrencyType.Rub,
-                        Type = TransactionType.Credit,
-                        Description = "Перевод от друга",
-                        Timestamp = DateTime.UtcNow.AddDays(-1)
-                    }
-                ]
-            });
-            _owners.Add(_accounts[0].OwnerId);
+            return await Task.FromResult(false);
         }
 
-        public Task<IEnumerable<Account?>> GetAllByOwnerId(Guid ownerGuid, CancellationToken cancellationToken)
+        public async Task<bool> Delete(DeleteAccountCommand request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_accounts.Where(x => x.OwnerId == ownerGuid).Cast<Account?>()); ;
+            var account = _accountRepository.Accounts.FirstOrDefault(x => x.Id == request.AccountGuid);
+            if (account == null)
+                return await Task.FromResult(false);
+
+            _accountRepository.Accounts.Remove(account);
+            return await Task.FromResult(true);
         }
 
-        public Task<Account?> GetById(Guid guid, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(_accounts.FirstOrDefault(x => x.Id == guid));
-        }
-
-        public Task<bool> HasAccount(Guid ownerId)
-        {
-            return Task.FromResult(_accounts.FirstOrDefault(x => x.OwnerId == ownerId) != null);
-        }
-
-        public Task<bool> CreateAsync(Account request, CancellationToken cancellationToken)
-        {
-            _accounts.Add(request);
-            return Task.FromResult(true);
-        }
-
-        public Task<bool> Update(Account request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> Delete(DeleteAccountCommand request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Transaction?>> GetStatement(
+        public async Task<IReadOnlyList<Transaction>> GetStatement(
             GetStatementQuery request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(
-                _accounts
+            return await Task.FromResult(
+                _accountRepository.Accounts
                 .First(x => x.OwnerId == request.AccountId)
                 .Transactions
                 .Where(t => t.Timestamp >= request.From && t.Timestamp <= request.To)
-                .AsEnumerable()
-                .Cast<Transaction?>());
+                .ToList());
         }
 
-        public Task<bool> OwnerExistsAsync(Guid guid)
+        public async Task<bool> RegisterTransaction(RegisterTransactionCommand request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_owners.Any(x => x == guid));
+            var account = _accountRepository.Accounts.First(x => x.Id == request.TransactionDto.AccountId);
+            var transactionDto = request.TransactionDto;
+            account.Transactions.Add(transactionDto.Adapt<Transaction>());
+            return await Task.FromResult(true);
         }
 
-        public Task<bool> OwnerExistsAsync(Guid? guid)
+        public async Task<bool> Transfer(TransferCommand request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_owners.FirstOrDefault(x => x == guid) == Guid.Empty);
+            var from = _accountRepository.Accounts.First(x => x.Id == request.TransferDto.From);
+            var to = _accountRepository.Accounts.First(x => x.Id == request.TransferDto.To);
+
+            from.Balance -= request.TransferDto.Amount;
+            to.Balance += request.TransferDto.Amount;
+
+            var registerTransactionCommandFrom = new RegisterTransactionCommand
+            (
+                new TransactionDto
+                {
+                    Amount = request.TransferDto.Amount,
+                    AccountId = from.Id,
+                    Timestamp = DateTime.UtcNow,
+                    Type = TransactionType.Debit,
+                    Currency = from.CurrencyType
+                }
+            );
+
+
+            var registerTransactionCommandTo = new RegisterTransactionCommand
+            (
+                new TransactionDto
+                {
+                    Amount = request.TransferDto.Amount,
+                    AccountId = from.Id,
+                    Timestamp = DateTime.UtcNow,
+                    Type = TransactionType.Credit,
+                    Currency = from.CurrencyType
+                }
+            );
+
+            await Task
+                .WhenAll(
+                   RegisterTransaction(registerTransactionCommandFrom, cancellationToken),
+                RegisterTransaction(registerTransactionCommandTo, cancellationToken));
+
+            return await Task.FromResult(true);
         }
 
-        public Task<bool> IsCurrencySupportedAsync(string currency)
+        public async Task<bool> HasAccount(Guid ownerId, Guid accountGuid, CancellationToken cancellationToken)
         {
-            //var exists = CurrencyType. .Any(x => x == currency);
-            return Task.FromResult(true);
+            return await Task.FromResult(_accountRepository.Accounts.Any(x => x.OwnerId == ownerId));
+        }
+
+        public async Task<bool> HasAccount(Guid ownerId, CancellationToken cancellationToken)
+        {
+            return await Task.FromResult(_accountRepository.Accounts.Any(x => x.OwnerId == ownerId));
         }
     }
 }

@@ -3,5 +3,5 @@ using MediatR;
 
 namespace BankAccount.Features.Accounts.GetAccount
 {
-    public record GetAccountQuery(Guid Guid) : IRequest<AccountDto?>;
+    public record GetAccountQuery(Guid AccountGuid) : IRequest<AccountDto?>;
 }

@@ -10,7 +10,7 @@ namespace BankAccount.Features.Accounts.GetAccount
     {
         public async Task<AccountDto?> Handle(GetAccountQuery request, CancellationToken cancellationToken)
         {
-            var account = await accountService.GetById(request.Guid, cancellationToken);
+            var account = await accountService.GetById(request.AccountGuid, cancellationToken);
             return account.Adapt<AccountDto?>();
         }
     }

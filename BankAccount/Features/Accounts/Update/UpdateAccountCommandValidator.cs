@@ -1,25 +1,29 @@
-﻿using BankAccount.Features.Accounts.Create;
-using BankAccount.Features.Models.Enums;
+﻿using BankAccount.Features.Models.Enums;
 using BankAccount.Services.Interfaces;
 using FluentValidation;
 
 namespace BankAccount.Features.Accounts.Update
 {
-    public class UpdateAccountCommandValidator : AbstractValidator<CreateAccountCommand>
+    public class UpdateAccountCommandValidator : AbstractValidator<UpdateAccountCommand>
     {
-        public UpdateAccountCommandValidator(IAccountService accountService)
+        public UpdateAccountCommandValidator(
+            IAccountService accountService,
+            IClientVerificationService clientVerificationService)
         {
-            RuleFor(x => x.AccountDto.OwnerId)
-                .NotEmpty().WithMessage("OwnerId is required.")
-                .MustAsync(async (ownerId, _) => await accountService.OwnerExistsAsync(ownerId))
-                .WithMessage("OwnerId must exist.");
+            RuleFor(x => x.AccountDto.Id)
+                .NotEmpty()
+                .WithMessage("AccountId is required.")
+                .MustAsync(async (accountGuid, cancellationToken)
+                    => await accountService.GetById(accountGuid, cancellationToken) != null)
+                .WithMessage("AccountId must exist.");
 
-            /*
-            RuleFor(x => x.AccountDto.Currency)
-                .NotEmpty().WithMessage("CurrencyType is required.")
-                .MustAsync(async (currency, _) => await accountService.IsCurrencySupportedAsync(currency))
-                .WithMessage("CurrencyType is not supported.");
-            */
+
+            RuleFor(x => x.AccountDto.OwnerId)
+                .NotEmpty()
+                .WithMessage("OwnerId is required.")
+                .MustAsync(async (ownerId, cancellationToken) 
+                    => await clientVerificationService.OwnerExistsAsync(ownerId, cancellationToken))
+                .WithMessage("OwnerId must exist.");
 
             RuleFor(x => x.AccountDto.Type)
                 .IsInEnum().WithMessage("Invalid account type.");

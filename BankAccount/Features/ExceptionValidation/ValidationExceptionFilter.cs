@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace BankAccount.Features.Accounts
+namespace BankAccount.Features.ExceptionValidation
 {
     public class ValidationExceptionFilter : IExceptionFilter
     {

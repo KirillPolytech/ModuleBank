@@ -1,10 +1,14 @@
+using BankAccount.Features.Accounts.CheckExists;
 using BankAccount.Features.Accounts.Create;
 using BankAccount.Features.Accounts.Delete;
 using BankAccount.Features.Accounts.GetAccount;
 using BankAccount.Features.Accounts.GetAccounts;
 using BankAccount.Features.Accounts.GetStatement;
 using BankAccount.Features.Accounts.Patch;
+using BankAccount.Features.Accounts.RegisterTransaction;
+using BankAccount.Features.Accounts.Transfer;
 using BankAccount.Features.Accounts.Update;
+using BankAccount.Features.Models;
 using BankAccount.Features.Models.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -20,13 +24,13 @@ namespace BankAccount.Features.Controllers
         /// </summary>
         /// <param name="request">The account data to create.</param>
         /// <returns>The created account with a location URI.</returns>
-        [HttpPost]
         [ProducesResponseType(typeof(AccountDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateAccount([FromBody] CreateAccountCommand request)
         {
             var newAccount = await mediator.Send(request);
-            return Created($"/accounts/{newAccount.Id}", newAccount);
+            return Created($"{newAccount.Id}", newAccount);
         }
 
         /// <summary>
@@ -35,13 +39,13 @@ namespace BankAccount.Features.Controllers
         /// <param name="accountId"></param>
         /// <param name="request">The updated account data (must include the account ID).</param>
         /// <returns>The updated account, or BadRequest if the account does not exist.</returns>
-        [HttpPut("/accounts/{accountId:guid}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPut("{accountId:guid}")]
         public async Task<IActionResult> UpdateAccount(Guid accountId, [FromBody] UpdateAccountCommand request)
         {
             var result = await mediator.Send(request);
-            return result ? BadRequest() : Ok(result);
+            return !result ? BadRequest() : Ok(result);
         }
 
         /// <summary>
@@ -51,11 +55,13 @@ namespace BankAccount.Features.Controllers
         /// <returns>
         /// Returns BadRequest if deletion failed, otherwise returns Ok with the result.
         /// </returns>
-        [HttpDelete("/accounts/{accountId:guid}")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpDelete("{accountId:guid}")]
         public async Task<IActionResult> DeleteAccount(Guid accountId)
         {
             var result = await mediator.Send(new DeleteAccountCommand(accountId));
-            return result ? BadRequest() : Ok(result);
+            return !result ? BadRequest() : Ok(result);
         }
 
         /// <summary>
@@ -65,7 +71,9 @@ namespace BankAccount.Features.Controllers
         /// <returns>
         /// Returns BadRequest if the account is not found, otherwise returns Ok with the account data.
         /// </returns>
-        [HttpGet("/accounts/{accountId:guid}")]
+        [ProducesResponseType(typeof(AccountDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpGet("{accountId:guid}")]
         public async Task<IActionResult> GetAccount([FromRoute] Guid accountId)
         {
             var account = await mediator.Send(new GetAccountQuery(accountId));
@@ -79,7 +87,9 @@ namespace BankAccount.Features.Controllers
         /// <returns>
         /// Returns BadRequest if no accounts are found, otherwise returns Ok with the list of accounts.
         /// </returns>
-        [HttpGet("accounts")]
+        [ProducesResponseType(typeof(IEnumerable<AccountDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpGet("getAccounts")]
         public async Task<IActionResult> GetAccounts([FromQuery] Guid ownerId)
         {
             var accounts = await mediator.Send(new GetAccountsQuery(ownerId));
@@ -87,17 +97,22 @@ namespace BankAccount.Features.Controllers
         }
 
         /// <summary>
-        /// Checks if an account exists for a given owner.
+        /// Checks whether an account with the specified GUID exists.
         /// </summary>
-        /// <param name="ownerId">The GUID of the account owner to check.</param>
+        /// <param name="accountGuid">The unique identifier of the account to check.</param>
         /// <returns>
-        /// Returns BadRequest if no account is found, otherwise returns Ok with the account data.
+        /// Returns <c>200 OK</c> with <c>true</c> if the account exists;
+        /// returns <c>400 Bad Request</c> if the account does not exist or the request is invalid.
         /// </returns>
-        [HttpGet("exists")]
-        public async Task<IActionResult> CheckAccountExists([FromQuery] Guid ownerId)
+        /// <response code="200">Account exists</response>
+        /// <response code="400">Account does not exist or the request is invalid</response>
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpGet("{accountGuid:guid}/exists")]
+        public async Task<IActionResult> CheckAccountExists(Guid accountGuid)
         {
-            var account = await mediator.Send(new GetAccountQuery(ownerId));
-            return account is null ? BadRequest() : Ok(account);
+            var account = await mediator.Send(new CheckAccountExistsQuery(accountGuid));
+            return !account ? BadRequest() : Ok(account);
         }
 
         /// <summary>
@@ -108,11 +123,13 @@ namespace BankAccount.Features.Controllers
         /// <returns>
         /// Returns BadRequest if the patch operation failed, otherwise returns Ok with the result.
         /// </returns>
-        [HttpPatch("{accountId}")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPatch("{accountId:guid}")]
         public async Task<IActionResult> PatchAccount(Guid accountId, [FromBody] PatchAccountCommand request)
         {
-            var result = await mediator.Send(request with { Guid = accountId });
-            return result ? BadRequest() : Ok(result);
+            var result = await mediator.Send(request with { AccountId = accountId });
+            return !result ? BadRequest() : Ok(result);
         }
 
         /// <summary>
@@ -126,14 +143,43 @@ namespace BankAccount.Features.Controllers
         /// </returns>
         /// <response code="200">Returns the list of transactions for the specified period.</response>
         /// <response code="400">Returned when no transactions are found for the specified criteria.</response>
+        [ProducesResponseType(typeof(IEnumerable<Transaction?>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{accountId:guid}/statement")]
         public async Task<IActionResult> GetAccountStatement(
-            Guid accountId, 
-            [FromQuery] DateTime? from, 
-            [FromQuery] DateTime? to)
+            Guid accountId, [FromQuery] DateTime from, [FromQuery] DateTime to)
         {
             var transactions = await mediator.Send(new GetStatementQuery(accountId, from, to));
             return !transactions.Any() ? BadRequest() : Ok(transactions);
+        }
+
+        /// <summary>
+        /// Performs a funds transfer between accounts.
+        /// </summary>
+        /// <param name="transferDto">Transfer details including amount, source, and destination accounts.</param>
+        /// <returns>Returns HTTP 200 OK with a boolean indicating success, or HTTP 400 Bad Request if the transfer fails.</returns>
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost("transfer")]
+        public async Task<IActionResult> Transfer([FromBody] TransferDto transferDto)
+        {
+            var transactions = await mediator.Send(new TransferCommand(transferDto));
+            return !transactions ? BadRequest() : Ok(transactions);
+        }
+
+        /// <summary>
+        /// Registers a transaction for the specified account.
+        /// </summary>
+        /// <param name="accountId">The ID of the account for which the transaction is registered.</param>
+        /// <param name="transferDto">The transaction details to register.</param>
+        /// <returns>Returns HTTP 200 OK with a boolean indicating success, or HTTP 400 Bad Request if the registration fails.</returns>
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpGet("{accountId:guid}/transactions")]
+        public async Task<IActionResult> RegisterTransaction(Guid accountId, TransactionDto transferDto)
+        {
+            var transactions = await mediator.Send(new RegisterTransactionCommand(transferDto));
+            return !transactions ? BadRequest() : Ok(transactions);
         }
     }
 }

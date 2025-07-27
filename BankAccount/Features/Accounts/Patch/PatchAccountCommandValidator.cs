@@ -1,12 +1,14 @@
-﻿using BankAccount.Services.Interfaces;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace BankAccount.Features.Accounts.Patch
 {
     public class PatchAccountCommandValidator : AbstractValidator<PatchAccountCommand>
     {
-        public PatchAccountCommandValidator(IAccountService accountService)
+        public PatchAccountCommandValidator()
         {
+            RuleFor(x => x.AccountId)
+                .NotEmpty()
+                .WithMessage("AccountId must exist");
         }
     }
 }

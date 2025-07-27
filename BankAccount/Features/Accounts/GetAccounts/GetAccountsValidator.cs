@@ -5,8 +5,14 @@ namespace BankAccount.Features.Accounts.GetAccounts
 {
     public class GetAccountsValidator : AbstractValidator<GetAccountsQuery>
     {
-        public GetAccountsValidator(IAccountService accountService)
+        public GetAccountsValidator(
+            IClientVerificationService clientVerificationService)
         {
+            RuleFor(x => x)
+                .NotEmpty()
+                .MustAsync(async (getAccountsQuery, cancellationToken) 
+                    => await clientVerificationService.OwnerExistsAsync(getAccountsQuery.OwnerGuid, cancellationToken))
+                .WithMessage("OwnerId must exist");
         }
     }
 }

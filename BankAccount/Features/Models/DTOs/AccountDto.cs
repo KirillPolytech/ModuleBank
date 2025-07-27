@@ -17,7 +17,7 @@ namespace BankAccount.Features.Models.DTOs
         /// Identifier of the account owner. Can be null.
         /// </summary>
         [DefaultValue("00000000-0000-0000-0000-000000000000")]
-        public Guid? OwnerId { get; set; }
+        public Guid OwnerId { get; set; }
 
         /// <summary>
         /// Type of the account (e.g., savings, deposit).
