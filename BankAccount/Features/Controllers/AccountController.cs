@@ -87,7 +87,7 @@ namespace BankAccount.Features.Controllers
         /// <returns>
         /// Returns BadRequest if no accounts are found, otherwise returns Ok with the list of accounts.
         /// </returns>
-        [ProducesResponseType(typeof(IEnumerable<AccountDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<AccountDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("getAccounts")]
         public async Task<IActionResult> GetAccounts([FromQuery] Guid ownerId)
@@ -143,7 +143,7 @@ namespace BankAccount.Features.Controllers
         /// </returns>
         /// <response code="200">Returns the list of transactions for the specified period.</response>
         /// <response code="400">Returned when no transactions are found for the specified criteria.</response>
-        [ProducesResponseType(typeof(IEnumerable<Transaction?>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<Transaction?>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{accountId:guid}/statement")]
         public async Task<IActionResult> GetAccountStatement(
