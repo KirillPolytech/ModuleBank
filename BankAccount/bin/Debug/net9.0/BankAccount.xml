@@ -88,7 +88,7 @@
             <param name="transferDto">Transfer details including amount, source, and destination accounts.</param>
             <returns>Returns HTTP 200 OK with a boolean indicating success, or HTTP 400 Bad Request if the transfer fails.</returns>
         </member>
-        <member name="M:BankAccount.Features.Controllers.AccountController.RegisterTransaction(System.Guid,BankAccount.Features.Models.DTOs.TransactionDto)">
+        <member name="M:BankAccount.Features.Controllers.TransactionController.RegisterTransaction(System.Guid,BankAccount.Features.Models.DTOs.TransactionDto)">
             <summary>
             Registers a transaction for the specified account.
             </summary>

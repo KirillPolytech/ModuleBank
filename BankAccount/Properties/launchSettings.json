@@ -1,23 +1,38 @@
-﻿{
-  "$schema": "https://json.schemastore.org/launchsettings.json",
+{
   "profiles": {
     "http": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "applicationUrl": "http://localhost:5143",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Jwt__Key": "ASdbbzcv024okpb1kls",
+        "Jwt__Audience": "default-audience",
+        "Jwt__Authority": "http://default-authority"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5000/swagger"
     },
     "https": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "applicationUrl": "https://localhost:7201;http://localhost:5143",
+      "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Jwt__Key": "b7236e9a9f2f4bc5a7d81f92e5d3e999",
+        "Jwt__Audience": "account"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5000/swagger"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:5000/swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://+:80"
+      },
+      "publishAllPorts": false,
+      "useSSL": false
     }
-  }
+  },
+  "$schema": "https://json.schemastore.org/launchsettings.json"
 }

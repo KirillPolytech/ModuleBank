@@ -15,7 +15,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Boolean",
+        "Type": "BankAccount.Features.Models.MbResult\u00601[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -90,7 +90,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Boolean",
+        "Type": "BankAccount.Features.Models.MbResult\u00601[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -125,7 +125,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "BankAccount.Features.Models.DTOs.AccountDto",
+        "Type": "BankAccount.Features.Models.MbResult\u00601[[BankAccount.Features.Models.DTOs.AccountDto, BankAccount, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -165,7 +165,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Boolean",
+        "Type": "BankAccount.Features.Models.MbResult\u00601[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -210,47 +210,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[BankAccount.Features.Models.Transaction, BankAccount, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 400
-      }
-    ]
-  },
-  {
-    "ContainingType": "BankAccount.Features.Controllers.AccountController",
-    "Method": "RegisterTransaction",
-    "RelativePath": "Account/{accountId}/transactions",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "accountId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "transferDto",
-        "Type": "BankAccount.Features.Models.DTOs.TransactionDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Boolean",
+        "Type": "BankAccount.Features.Models.MbResult\u00601[[System.Collections.Generic.List\u00601[[BankAccount.Features.Models.Transaction, BankAccount, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -285,7 +245,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "BankAccount.Features.Models.DTOs.AccountDto",
+        "Type": "Microsoft.AspNetCore.Mvc.ActionResult\u00601[[BankAccount.Features.Models.MbResult\u00601[[BankAccount.Features.Models.DTOs.AccountDto, BankAccount, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], BankAccount, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -320,7 +280,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[BankAccount.Features.Models.DTOs.AccountDto, BankAccount, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "BankAccount.Features.Models.MbResult\u00601[[System.Collections.Generic.List\u00601[[BankAccount.Features.Models.DTOs.AccountDto, BankAccount, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -355,7 +315,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Boolean",
+        "Type": "BankAccount.Features.Models.MbResult\u00601[[System.Boolean, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -370,6 +330,67 @@
           "application/json",
           "text/json"
         ],
+        "StatusCode": 400
+      }
+    ]
+  },
+  {
+    "ContainingType": "BankAccount.Features.Controllers.TransactionController",
+    "Method": "RegisterTransaction",
+    "RelativePath": "Transaction/{accountId}/transactions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "AccountId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "Amount",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "Currency",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Type",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Timestamp",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
         "StatusCode": 400
       }
     ]

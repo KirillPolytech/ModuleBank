@@ -37,17 +37,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/AccountDto"
+                  "$ref": "#/components/schemas/AccountDtoMbResultActionResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AccountDto"
+                  "$ref": "#/components/schemas/AccountDtoMbResultActionResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AccountDto"
+                  "$ref": "#/components/schemas/AccountDtoMbResultActionResult"
                 }
               }
             }
@@ -179,17 +179,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/BooleanMbResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/BooleanMbResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/BooleanMbResult"
                 }
               }
             }
@@ -239,17 +239,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/AccountDto"
+                  "$ref": "#/components/schemas/AccountDtoMbResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AccountDto"
+                  "$ref": "#/components/schemas/AccountDtoMbResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AccountDto"
+                  "$ref": "#/components/schemas/AccountDtoMbResult"
                 }
               }
             }
@@ -319,17 +319,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/BooleanMbResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/BooleanMbResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/BooleanMbResult"
                 }
               }
             }
@@ -380,26 +380,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AccountDto"
-                  }
+                  "$ref": "#/components/schemas/AccountDtoListMbResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AccountDto"
-                  }
+                  "$ref": "#/components/schemas/AccountDtoListMbResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AccountDto"
-                  }
+                  "$ref": "#/components/schemas/AccountDtoListMbResult"
                 }
               }
             }
@@ -451,17 +442,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/BooleanMbResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/BooleanMbResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/BooleanMbResult"
                 }
               }
             }
@@ -531,26 +522,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Transaction"
-                  }
+                  "$ref": "#/components/schemas/TransactionListMbResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Transaction"
-                  }
+                  "$ref": "#/components/schemas/TransactionListMbResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Transaction"
-                  }
+                  "$ref": "#/components/schemas/TransactionListMbResult"
                 }
               }
             }
@@ -610,17 +592,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/BooleanMbResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/BooleanMbResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "boolean"
+                  "$ref": "#/components/schemas/BooleanMbResult"
                 }
               }
             }
@@ -648,44 +630,79 @@
         }
       }
     },
-    "/Account/{accountId}/transactions": {
+    "/Transaction/{accountId}/transactions": {
       "get": {
         "tags": [
-          "Account"
+          "Transaction"
         ],
         "summary": "Registers a transaction for the specified account.",
         "parameters": [
           {
             "name": "accountId",
-            "in": "path",
+            "in": "query",
             "description": "The ID of the account for which the transaction is registered.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "AccountId",
+            "in": "path",
+            "description": "The unique identifier of the account associated with the transaction.",
             "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
             }
-          }
-        ],
-        "requestBody": {
-          "description": "The transaction details to register.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TransactionDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TransactionDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/TransactionDto"
-              }
+          },
+          {
+            "name": "Amount",
+            "in": "query",
+            "description": "The amount of the transaction.",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "Currency",
+            "in": "query",
+            "description": "The currency type of the transaction amount.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CurrencyType"
+            }
+          },
+          {
+            "name": "Type",
+            "in": "query",
+            "description": "The type of the transaction (e.g., debit, credit).",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/TransactionType"
+            }
+          },
+          {
+            "name": "Description",
+            "in": "query",
+            "description": "Optional description or note about the transaction.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Timestamp",
+            "in": "query",
+            "description": "The date and time when the transaction occurred.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -708,24 +725,7 @@
             }
           },
           "400": {
-            "description": "Bad Request",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
+            "description": "Bad Request"
           }
         }
       }
@@ -777,6 +777,68 @@
         "additionalProperties": false,
         "description": "DTO representing a bank account."
       },
+      "AccountDtoListMbResult": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountDto"
+            },
+            "nullable": true
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          },
+          "validationErrors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AccountDtoMbResult": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AccountDto"
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          },
+          "validationErrors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AccountDtoMbResultActionResult": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "$ref": "#/components/schemas/ActionResult"
+          },
+          "value": {
+            "$ref": "#/components/schemas/AccountDtoMbResult"
+          }
+        },
+        "additionalProperties": false
+      },
       "AccountType": {
         "enum": [
           0,
@@ -785,6 +847,33 @@
         ],
         "type": "integer",
         "format": "int32"
+      },
+      "ActionResult": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "BooleanMbResult": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          },
+          "validationErrors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       },
       "CreateAccountCommand": {
         "type": "object",
@@ -908,45 +997,32 @@
         },
         "additionalProperties": false
       },
-      "TransactionDto": {
-        "required": [
-          "accountId",
-          "amount",
-          "currency",
-          "timestamp",
-          "type"
-        ],
+      "TransactionListMbResult": {
         "type": "object",
         "properties": {
-          "accountId": {
-            "type": "string",
-            "description": "The unique identifier of the account associated with the transaction.",
-            "format": "uuid"
+          "success": {
+            "type": "boolean"
           },
-          "amount": {
-            "type": "number",
-            "description": "The amount of the transaction.",
-            "format": "double"
-          },
-          "currency": {
-            "$ref": "#/components/schemas/CurrencyType"
-          },
-          "type": {
-            "$ref": "#/components/schemas/TransactionType"
-          },
-          "description": {
-            "type": "string",
-            "description": "Optional description or note about the transaction.",
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Transaction"
+            },
             "nullable": true
           },
-          "timestamp": {
+          "error": {
             "type": "string",
-            "description": "The date and time when the transaction occurred.",
-            "format": "date-time"
+            "nullable": true
+          },
+          "validationErrors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
           }
         },
-        "additionalProperties": false,
-        "description": "Data Transfer Object representing a financial transaction."
+        "additionalProperties": false
       },
       "TransactionType": {
         "enum": [
@@ -987,6 +1063,29 @@
         },
         "additionalProperties": false
       }
+    },
+    "securitySchemes": {
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "http://localhost:18080/realms/mb-realm/protocol/openid-connect/auth",
+            "tokenUrl": "http://localhost:18080/realms/mb-realm/protocol/openid-connect/token",
+            "scopes": {
+              "openid": "OpenID scope",
+              "profile": "Profile scope"
+            }
+          }
+        }
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "oauth2": [
+        "openid",
+        "profile"
+      ]
+    }
+  ]
 }

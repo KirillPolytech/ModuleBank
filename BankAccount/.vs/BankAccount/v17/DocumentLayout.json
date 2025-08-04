@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "F:\\Unity\\ModuleBank_Task_1\\BankAccount\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A731AD4A-7733-4547-9CCF-8F3FB4FAA7AD}|BankAccount.csproj|f:\\unity\\modulebank_task_1\\bankaccount\\features\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A731AD4A-7733-4547-9CCF-8F3FB4FAA7AD}|BankAccount.csproj|solutionrelative:features\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A731AD4A-7733-4547-9CCF-8F3FB4FAA7AD}|BankAccount.csproj|f:\\unity\\modulebank_task_1\\bankaccount\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A731AD4A-7733-4547-9CCF-8F3FB4FAA7AD}|BankAccount.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A731AD4A-7733-4547-9CCF-8F3FB4FAA7AD}|BankAccount.csproj|f:\\unity\\modulebank_task_1\\bankaccount\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A731AD4A-7733-4547-9CCF-8F3FB4FAA7AD}|BankAccount.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A731AD4A-7733-4547-9CCF-8F3FB4FAA7AD}|BankAccount.csproj|f:\\unity\\modulebank_task_1\\bankaccount\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A731AD4A-7733-4547-9CCF-8F3FB4FAA7AD}|BankAccount.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,14 +27,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AccountController.cs",
-              "DocumentMoniker": "F:\\Unity\\ModuleBank_Task_1\\BankAccount\\Features\\Controllers\\AccountController.cs",
-              "RelativeDocumentMoniker": "Features\\Controllers\\AccountController.cs",
-              "ToolTip": "F:\\Unity\\ModuleBank_Task_1\\BankAccount\\Features\\Controllers\\AccountController.cs",
-              "RelativeToolTip": "Features\\Controllers\\AccountController.cs",
-              "ViewState": "AgIAAIwAAAAAAAAAAAAuwJUAAABPAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-27T20:02:39.533Z",
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "F:\\Unity\\ModuleBank_Task_1\\BankAccount\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "Properties\\launchSettings.json",
+              "ToolTip": "F:\\Unity\\ModuleBank_Task_1\\BankAccount\\Properties\\launchSettings.json",
+              "RelativeToolTip": "Properties\\launchSettings.json",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAABoAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-08-04T15:02:32.632Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "F:\\Unity\\ModuleBank_Task_1\\BankAccount\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "F:\\Unity\\ModuleBank_Task_1\\BankAccount\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-08-04T14:35:38.522Z",
               "EditorCaption": ""
             },
             {
@@ -41,9 +58,10 @@
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "F:\\Unity\\ModuleBank_Task_1\\BankAccount\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABQAAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-27T19:58:10.837Z"
+              "WhenOpened": "2025-08-03T16:13:10.257Z",
+              "EditorCaption": ""
             }
           ]
         }
