@@ -1,4 +1,6 @@
 ﻿using BankAccount.Features.Accounts.RegisterTransaction;
+using BankAccount.Features.Accounts.Transfer;
+using BankAccount.Features.Models;
 using BankAccount.Features.Models.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -17,12 +19,14 @@ namespace BankAccount.Features.Controllers
         }
 
         /// <summary>
-        /// Registers a transaction for the specified account.
+        /// Registers a new transaction for the specified account.
         /// </summary>
-        /// <param name="accountId">The ID of the account for which the transaction is registered.</param>
+        /// <param name="accountId">The unique identifier of the account for which the transaction is registered.</param>
         /// <param name="transferDto">The transaction details to register.</param>
-        /// <returns>Returns HTTP 200 OK with a boolean indicating success, or HTTP 400 Bad Request if the registration fails.</returns>
-        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        /// <returns>Boolean indicating whether the transaction was registered successfully.</returns>
+        /// <response code="200">Transaction registered successfully.</response>
+        /// <response code="400">Bad request due to invalid input data.</response>
+        /// <remarks>Authorization is required.</remarks>        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
         [HttpGet("{accountId:guid}/transactions")]
@@ -30,6 +34,24 @@ namespace BankAccount.Features.Controllers
         {
             var transactions = await _mediator.Send(new RegisterTransactionCommand(transferDto));
             return Ok(transactions);
+        }
+
+        /// <summary>
+        /// Executes a transfer between accounts based on the provided transfer details.
+        /// </summary>
+        /// <param name="transferDto">The transfer data including source, destination, and amount.</param>
+        /// <returns>Operation result indicating whether the transfer was successful.</returns>
+        /// <response code="200">Transfer completed successfully.</response>
+        /// <response code="400">Bad request due to invalid input data.</response>
+        /// <remarks>Authorization is required.</remarks>
+        [ProducesResponseType(typeof(MbResult<bool>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize]
+        [HttpPost("transfer")]
+        public async Task<MbResult<bool>> Transfer([FromBody] TransferDto transferDto)
+        {
+            var result = await _mediator.Send(new TransferCommand(transferDto));
+            return MbResult<bool>.Ok(result);
         }
     }
 }

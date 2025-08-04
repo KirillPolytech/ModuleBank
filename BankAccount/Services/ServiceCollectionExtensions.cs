@@ -21,10 +21,13 @@ namespace BankAccount.Services
             options.EnableAnnotations();
 
             var authority = builder.Configuration["Jwt:Authority"];
-            var swaggerAuthority = builder.Configuration["Jwt:SwaggerAuthority"];
+            var tokenAuthority = builder.Configuration["Jwt:TokenAuthority"];
 
             if (string.IsNullOrEmpty(authority))
                 throw new InvalidOperationException("Jwt:Authority configuration is missing.");
+
+            if (string.IsNullOrEmpty(tokenAuthority))
+                throw new InvalidOperationException("Jwt:TokenAuthority configuration is missing.");
 
             options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
             {
@@ -34,7 +37,7 @@ namespace BankAccount.Services
                     AuthorizationCode = new OpenApiOAuthFlow
                     {
                         AuthorizationUrl = new Uri($"{authority}/protocol/openid-connect/auth"),
-                        TokenUrl = new Uri($"{swaggerAuthority}/protocol/openid-connect/token"),
+                        TokenUrl = new Uri(tokenAuthority!),
                         Scopes = new Dictionary<string, string>
                         {
                             { "openid", "OpenID scope" },

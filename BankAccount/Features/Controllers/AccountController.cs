@@ -5,7 +5,6 @@ using BankAccount.Features.Accounts.GetAccount;
 using BankAccount.Features.Accounts.GetAccounts;
 using BankAccount.Features.Accounts.GetStatement;
 using BankAccount.Features.Accounts.Patch;
-using BankAccount.Features.Accounts.Transfer;
 using BankAccount.Features.Accounts.Update;
 using BankAccount.Features.Models;
 using BankAccount.Features.Models.DTOs;
@@ -20,10 +19,13 @@ namespace BankAccount.Features.Controllers
     public class AccountController(IMediator mediator) : ControllerBase
     {
         /// <summary>
-        /// Creates a new bank account.
+        /// Creates a new account based on the provided request data.
         /// </summary>
-        /// <param name="request">The account data to create.</param>
-        /// <returns>The created account with a location URI.</returns>
+        /// <param name="request">The command containing the necessary information to create the account.</param>
+        /// <returns>Operation result containing the created account data.</returns>
+        /// <response code="201">Account successfully created.</response>
+        /// <response code="400">Bad request due to invalid input data.</response>
+        /// <remarks>Authorization is required.</remarks>
         [ProducesResponseType(typeof(ActionResult<MbResult<AccountDto>>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
@@ -35,11 +37,14 @@ namespace BankAccount.Features.Controllers
         }
 
         /// <summary>
-        /// Fully updates an existing bank account.
+        /// Updates an existing account identified by the specified account ID.
         /// </summary>
-        /// <param name="accountId"></param>
-        /// <param name="request">The updated account data (must include the account ID).</param>
-        /// <returns>The updated account, or BadRequest if the account does not exist.</returns>
+        /// <param name="accountId">The unique identifier of the account to update.</param>
+        /// <param name="request">The command containing updated account data.</param>
+        /// <returns>Operation result indicating whether the update was successful.</returns>
+        /// <response code="200">Account updated successfully.</response>
+        /// <response code="400">Bad request due to invalid input data.</response>
+        /// <remarks>Authorization is required.</remarks>
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
@@ -51,12 +56,13 @@ namespace BankAccount.Features.Controllers
         }
 
         /// <summary>
-        /// Deletes an account by its unique identifier.
+        /// Deletes an existing account identified by the specified account ID.
         /// </summary>
-        /// <param name="accountId">The GUID of the account to delete.</param>
-        /// <returns>
-        /// Returns BadRequest if deletion failed, otherwise returns Ok with the result.
-        /// </returns>
+        /// <param name="accountId">The unique identifier of the account to delete.</param>
+        /// <returns>Operation result indicating whether the deletion was successful.</returns>
+        /// <response code="200">Account deleted successfully.</response>
+        /// <response code="400">Bad request due to invalid input data.</response>
+        /// <remarks>Authorization is required.</remarks>
         [ProducesResponseType(typeof(MbResult<bool>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
@@ -68,12 +74,13 @@ namespace BankAccount.Features.Controllers
         }
 
         /// <summary>
-        /// Retrieves an account by its unique identifier.
+        /// Retrieves the details of an account by its unique identifier.
         /// </summary>
-        /// <param name="accountId">The GUID of the account to retrieve.</param>
-        /// <returns>
-        /// Returns BadRequest if the account is not found, otherwise returns Ok with the account data.
-        /// </returns>
+        /// <param name="accountId">The unique identifier of the account to retrieve.</param>
+        /// <returns>Operation result containing the account details.</returns>
+        /// <response code="200">Account retrieved successfully.</response>
+        /// <response code="400">Bad request due to invalid input data.</response>
+        /// <remarks>Authorization is required.</remarks>
         [ProducesResponseType(typeof(MbResult<AccountDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
@@ -85,12 +92,13 @@ namespace BankAccount.Features.Controllers
         }
 
         /// <summary>
-        /// Retrieves all accounts belonging to a specific owner.
+        /// Retrieves a list of accounts belonging to the specified owner.
         /// </summary>
-        /// <param name="ownerId">The GUID of the account owner.</param>
-        /// <returns>
-        /// Returns BadRequest if no accounts are found, otherwise returns Ok with the list of accounts.
-        /// </returns>
+        /// <param name="ownerId">The unique identifier of the owner whose accounts are requested.</param>
+        /// <returns>Operation result containing a list of account details.</returns>
+        /// <response code="200">Accounts retrieved successfully.</response>
+        /// <response code="400">Bad request due to invalid input data.</response>
+        /// <remarks>Authorization is required.</remarks>
         [ProducesResponseType(typeof(MbResult<List<AccountDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
@@ -102,15 +110,13 @@ namespace BankAccount.Features.Controllers
         }
 
         /// <summary>
-        /// Checks whether an account with the specified GUID exists.
+        /// Checks whether an account with the specified unique identifier exists.
         /// </summary>
         /// <param name="accountGuid">The unique identifier of the account to check.</param>
-        /// <returns>
-        /// Returns <c>200 OK</c> with <c>true</c> if the account exists;
-        /// returns <c>400 Bad Request</c> if the account does not exist or the request is invalid.
-        /// </returns>
-        /// <response code="200">Account exists</response>
-        /// <response code="400">Account does not exist or the request is invalid</response>
+        /// <returns>Operation result indicating if the account exists (true) or not (false).</returns>
+        /// <response code="200">Account existence check completed successfully.</response>
+        /// <response code="400">Bad request due to invalid input data.</response>
+        /// <remarks>Authorization is required.</remarks>
         [ProducesResponseType(typeof(MbResult<bool>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
@@ -122,13 +128,14 @@ namespace BankAccount.Features.Controllers
         }
 
         /// <summary>
-        /// Applies partial updates to an account identified by its GUID.
+        /// Partially updates an existing account identified by the specified account ID.
         /// </summary>
-        /// <param name="accountId">The GUID of the account to patch.</param>
-        /// <param name="request">The patch request containing updated account data.</param>
-        /// <returns>
-        /// Returns BadRequest if the patch operation failed, otherwise returns Ok with the result.
-        /// </returns>
+        /// <param name="accountId">The unique identifier of the account to update.</param>
+        /// <param name="request">The command containing the partial update data.</param>
+        /// <returns>Operation result indicating whether the update was successful.</returns>
+        /// <response code="200">Account updated successfully.</response>
+        /// <response code="400">Bad request due to invalid input data.</response>
+        /// <remarks>Authorization is required.</remarks>
         [ProducesResponseType(typeof(MbResult<bool>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
@@ -140,16 +147,15 @@ namespace BankAccount.Features.Controllers
         }
 
         /// <summary>
-        /// Retrieves the account statement for the specified account within the given date range.
+        /// Retrieves the account statement (list of transactions) for a specified account within a date range.
         /// </summary>
         /// <param name="accountId">The unique identifier of the account.</param>
-        /// <param name="from">The optional start date of the statement period (inclusive).</param>
-        /// <param name="to">The optional end date of the statement period (inclusive).</param>
-        /// <returns>
-        /// Returns a list of transactions if found; otherwise, returns a <see cref="BadRequestResult"/>.
-        /// </returns>
-        /// <response code="200">Returns the list of transactions for the specified period.</response>
-        /// <response code="400">Returned when no transactions are found for the specified criteria.</response>
+        /// <param name="from">Start date of the statement period.</param>
+        /// <param name="to">End date of the statement period.</param>
+        /// <returns>Operation result containing a list of transactions.</returns>
+        /// <response code="200">Account statement retrieved successfully.</response>
+        /// <response code="400">Bad request due to invalid input data.</response>
+        /// <remarks>Authorization is required.</remarks>
         [ProducesResponseType(typeof(MbResult<List<Transaction?>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
@@ -159,21 +165,6 @@ namespace BankAccount.Features.Controllers
         {
             var transactions = await mediator.Send(new GetStatementQuery(accountId, from, to));
             return MbResult<List<Transaction?>>.Ok(transactions!);
-        }
-
-        /// <summary>
-        /// Performs a funds transfer between accounts.
-        /// </summary>
-        /// <param name="transferDto">Transfer details including amount, source, and destination accounts.</param>
-        /// <returns>Returns HTTP 200 OK with a boolean indicating success, or HTTP 400 Bad Request if the transfer fails.</returns>
-        [ProducesResponseType(typeof(MbResult<bool>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize]
-        [HttpPost("transfer")]
-        public async Task<MbResult<bool>> Transfer([FromBody] TransferDto transferDto)
-        {
-            var result = await mediator.Send(new TransferCommand(transferDto));
-            return MbResult<bool>.Ok(result);
         }
     }
 }
