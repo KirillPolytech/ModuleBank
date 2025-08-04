@@ -1,2 +1,0 @@
-wwwroot\oauth2-redirect.html
-F:\Unity\ModuleBank_Task_1\BankAccount\wwwroot\oauth2-redirect.html
