@@ -3,5 +3,5 @@ using MediatR;
 
 namespace BankAccount.Features.Accounts.RegisterTransaction
 {
-    public record RegisterTransactionCommand(TransactionDto TransactionDto) : IRequest<bool>;
+    public record RegisterTransactionCommand(TransactionDto TransactionDto) : IRequest<Unit>;
 }

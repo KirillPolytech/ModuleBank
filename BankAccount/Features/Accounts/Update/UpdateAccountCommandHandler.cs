@@ -7,13 +7,13 @@ using MediatR;
 namespace BankAccount.Features.Accounts.Update
 {
     public class UpdateAccountCommandHandler(IAccountService accountService) 
-        : IRequestHandler<UpdateAccountCommand, bool>
+        : IRequestHandler<UpdateAccountCommand, Unit>
     {
-        public async Task<bool> Handle(UpdateAccountCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateAccountCommand request, CancellationToken cancellationToken)
         {
             var account = request.AccountDto.Adapt<Account>();
-
-            return await accountService.Patch(account.Adapt<PatchAccountDto>(), cancellationToken);
+            await accountService.Patch(account.Adapt<PatchAccountDto>(), cancellationToken);
+            return Unit.Value;
         }
     }
 }

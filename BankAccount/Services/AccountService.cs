@@ -5,24 +5,26 @@ using BankAccount.Features.Accounts.Transfer;
 using BankAccount.Features.Models;
 using BankAccount.Features.Models.DTOs;
 using BankAccount.Features.Models.Enums;
+using BankAccount.Persistence.Db;
 using BankAccount.Services.Interfaces;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankAccount.Services
 {
-    public class InMemoryAccountService : IAccountService
+    public class AccountService : IAccountService
     {
-        private readonly IAccountRepository _accountRepository;
+        private readonly AppDbContext _dbContext;
 
-        public InMemoryAccountService(IAccountRepository accountRepository)
+        public AccountService(AppDbContext dbContext)
         {
-            _accountRepository = accountRepository;
+            _dbContext = dbContext;
         }
 
         public async Task<IReadOnlyList<Account>> GetAllByOwnerId(Guid ownerGuid, CancellationToken cancellationToken)
         {
             return await Task.FromResult(
-                _accountRepository
+                _dbContext
                     .Accounts
                     .Where(x => x.OwnerId == ownerGuid)
                     .ToList());
@@ -30,66 +32,68 @@ namespace BankAccount.Services
 
         public async Task<Account?> GetById(Guid accountGuid, CancellationToken cancellationToken)
         {
-            return await Task.FromResult(_accountRepository.Accounts.FirstOrDefault(x => x.Id == accountGuid));
+            return await Task.FromResult(_dbContext.Accounts.FirstOrDefault(x => x.Id == accountGuid));
         }
 
-        public async Task<bool> Create(Account request, CancellationToken cancellationToken)
+        public async Task Create(Account request, CancellationToken cancellationToken)
         {
-            _accountRepository.Accounts.Add(request);
-            return await Task.FromResult(true);
+            _dbContext.Accounts.Add(request);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<bool> Patch(PatchAccountDto request, CancellationToken cancellationToken)
+        public async Task Patch(PatchAccountDto request, CancellationToken cancellationToken)
         {
-            for (var i = 0; i < _accountRepository.Accounts.Count; i++)
+            foreach (var account in _dbContext.Accounts)
             {
-                if (_accountRepository.Accounts.ElementAt(i).Id != request.AccountGuid)
+                if (account.Id != request.AccountGuid)
                     continue;
 
                 if (request.InterestRate != null)
-                    _accountRepository.Accounts[i].InterestRate = request.InterestRate;
+                    account.InterestRate = request.InterestRate;
 
                 if (request.Type != null)
-                    _accountRepository.Accounts[i].Type = (AccountType)request.Type;
-                return await Task.FromResult(true);
-            }
+                    account.Type = (AccountType)request.Type;
 
-            return await Task.FromResult(false);
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
         }
 
-        public async Task<bool> Delete(DeleteAccountCommand request, CancellationToken cancellationToken)
+        public async Task Delete(DeleteAccountCommand request, CancellationToken cancellationToken)
         {
-            var account = _accountRepository.Accounts.FirstOrDefault(x => x.Id == request.AccountGuid);
-            if (account == null)
-                return await Task.FromResult(false);
+            var account = _dbContext.Accounts.FirstOrDefaultAsync(x => x.Id == request.AccountGuid);
 
-            _accountRepository.Accounts.Remove(account);
-            return await Task.FromResult(true);
+            _dbContext.Accounts.Remove(account.Result!);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<IReadOnlyList<Transaction>> GetStatement(
             GetStatementQuery request, CancellationToken cancellationToken)
         {
             return await Task.FromResult(
-                _accountRepository.Accounts
-                .First(x => x.OwnerId == request.AccountId)
-                .Transactions
-                .Where(t => t.Timestamp >= request.From && t.Timestamp <= request.To)
-                .ToList());
+                _dbContext
+                    .Accounts
+                    .Include(account => account.Transactions)
+                    .First(x => x.OwnerId == request.AccountId)
+                    .Transactions
+                    .Where(t => t.Timestamp >= request.From && t.Timestamp <= request.To)
+                    .ToList());
         }
 
-        public async Task<bool> RegisterTransaction(RegisterTransactionCommand request, CancellationToken cancellationToken)
+        public async Task RegisterTransaction(RegisterTransactionCommand request, CancellationToken cancellationToken)
         {
-            var account = _accountRepository.Accounts.First(x => x.Id == request.TransactionDto.AccountId);
+            var account = await _dbContext.Accounts
+                .FirstOrDefaultAsync(x => x.Id == request.TransactionDto.AccountId, cancellationToken);
+            
             var transactionDto = request.TransactionDto;
-            account.Transactions.Add(transactionDto.Adapt<Transaction>());
-            return await Task.FromResult(true);
+            account!.Transactions.Add(transactionDto.Adapt<Transaction>());
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<bool> Transfer(TransferCommand request, CancellationToken cancellationToken)
+        public async Task Transfer(TransferCommand request, CancellationToken cancellationToken)
         {
-            var from = _accountRepository.Accounts.First(x => x.Id == request.TransferDto.From);
-            var to = _accountRepository.Accounts.First(x => x.Id == request.TransferDto.To);
+            var from = _dbContext.Accounts.First(x => x.Id == request.TransferDto.From);
+            var to = _dbContext.Accounts.First(x => x.Id == request.TransferDto.To);
 
             from.Balance -= request.TransferDto.Amount;
             to.Balance += request.TransferDto.Amount;
@@ -124,17 +128,16 @@ namespace BankAccount.Services
                    RegisterTransaction(registerTransactionCommandFrom, cancellationToken),
                 RegisterTransaction(registerTransactionCommandTo, cancellationToken));
 
-            return await Task.FromResult(true);
         }
 
         public async Task<bool> HasAccount(Guid ownerId, Guid accountGuid, CancellationToken cancellationToken)
         {
-            return await Task.FromResult(_accountRepository.Accounts.Any(x => x.OwnerId == ownerId));
+            return await Task.FromResult(_dbContext.Accounts.Any(x => x.OwnerId == ownerId));
         }
 
         public async Task<bool> HasAccount(Guid ownerId, CancellationToken cancellationToken)
         {
-            return await Task.FromResult(_accountRepository.Accounts.Any(x => x.OwnerId == ownerId));
+            return await Task.FromResult(_dbContext.Accounts.Any(x => x.OwnerId == ownerId));
         }
     }
 }

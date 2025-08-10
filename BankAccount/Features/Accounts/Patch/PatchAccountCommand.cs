@@ -3,5 +3,5 @@ using MediatR;
 
 namespace BankAccount.Features.Accounts.Patch
 {
-    public record PatchAccountCommand(Guid AccountId, PatchAccountDto AccountDto) : IRequest<bool>;
+    public record PatchAccountCommand(Guid AccountId, PatchAccountDto AccountDto) : IRequest<Unit>;
 }

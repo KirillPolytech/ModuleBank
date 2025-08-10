@@ -20,7 +20,7 @@
         "Jwt__Audience": "account"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:5000/swagger"
+      "applicationUrl": "http://localhost:5000"
     },
     "Container (Dockerfile)": {
       "commandName": "Docker",

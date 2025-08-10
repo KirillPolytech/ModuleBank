@@ -4,11 +4,12 @@ using MediatR;
 namespace BankAccount.Features.Accounts.Patch
 {
     public class PatchAccountCommandHandler(IAccountService accountService)
-        : IRequestHandler<PatchAccountCommand, bool>
+        : IRequestHandler<PatchAccountCommand, Unit>
     {
-        public async Task<bool> Handle(PatchAccountCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(PatchAccountCommand request, CancellationToken cancellationToken)
         {
-            return await accountService.Patch(request.AccountDto, cancellationToken);
+            await accountService.Patch(request.AccountDto, cancellationToken);
+            return Unit.Value;
         }
     }
 }

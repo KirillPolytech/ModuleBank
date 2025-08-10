@@ -9,12 +9,12 @@ namespace BankAccount.Services.Interfaces
 {
     public interface IAccountService
     {
-        Task<bool> Create(Account request, CancellationToken cancellationToken);
-        Task<bool> Patch(PatchAccountDto request, CancellationToken cancellationToken);
-        Task<bool> Delete(DeleteAccountCommand request, CancellationToken cancellationToken);
+        Task Create(Account request, CancellationToken cancellationToken);
+        Task Patch(PatchAccountDto request, CancellationToken cancellationToken);
+        Task Delete(DeleteAccountCommand request, CancellationToken cancellationToken);
         Task<IReadOnlyList<Account>> GetAllByOwnerId(Guid ownerId, CancellationToken cancellationToken);
-        Task<bool> RegisterTransaction(RegisterTransactionCommand request, CancellationToken cancellationToken);
-        Task<bool> Transfer(TransferCommand request, CancellationToken cancellationToken);
+        Task RegisterTransaction(RegisterTransactionCommand request, CancellationToken cancellationToken);
+        Task Transfer(TransferCommand request, CancellationToken cancellationToken);
         Task<IReadOnlyList<Transaction>> GetStatement(GetStatementQuery request, CancellationToken cancellationToken);
         Task<bool> HasAccount(Guid ownerId, CancellationToken cancellationToken);
         Task<bool> HasAccount(Guid ownerId, Guid accountGuid, CancellationToken cancellationToken);

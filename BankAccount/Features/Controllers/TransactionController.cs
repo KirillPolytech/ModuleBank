@@ -50,8 +50,8 @@ namespace BankAccount.Features.Controllers
         [HttpPost("transfer")]
         public async Task<MbResult<bool>> Transfer([FromBody] TransferDto transferDto)
         {
-            var result = await _mediator.Send(new TransferCommand(transferDto));
-            return MbResult<bool>.Ok(result);
+            await _mediator.Send(new TransferCommand(transferDto));
+            return MbResult<bool>.Ok(true);
         }
     }
 }

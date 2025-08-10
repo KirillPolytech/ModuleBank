@@ -1,19 +1,20 @@
-﻿using BankAccount.Services.Interfaces;
+﻿using BankAccount.Persistence.Interfaces;
+using BankAccount.Services.Interfaces;
 
 namespace BankAccount.Services
 {
     public class ClientVerification : IClientVerificationService
     {
-        private readonly IAccountRepository _accountRepository;
+        private readonly IOwnersRepository _repository;
 
-        public ClientVerification(IAccountRepository accountRepository)
+        public ClientVerification(IOwnersRepository repository)
         {
-            _accountRepository = accountRepository;
+            _repository = repository;
         }
 
         public async Task<bool> OwnerExistsAsync(Guid ownerGuid, CancellationToken cancellationToken)
         {
-            return await Task.FromResult(_accountRepository.Owners.Any(x => x == ownerGuid));
+            return await Task.FromResult(_repository.Owners.Any(x => x == ownerGuid));
         }
     }
 }

@@ -3,5 +3,5 @@ using MediatR;
 
 namespace BankAccount.Features.Accounts.Transfer
 {
-    public record TransferCommand(TransferDto TransferDto) : IRequest<bool>;
+    public record TransferCommand(TransferDto TransferDto) : IRequest<Unit>;
 }

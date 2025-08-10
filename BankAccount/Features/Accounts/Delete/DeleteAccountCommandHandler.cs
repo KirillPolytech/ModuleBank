@@ -4,11 +4,12 @@ using MediatR;
 namespace BankAccount.Features.Accounts.Delete
 {
     public class DeleteAccountCommandHandler(IAccountService accountService)
-        : IRequestHandler<DeleteAccountCommand, bool>
+        : IRequestHandler<DeleteAccountCommand, Unit>
     {
-        public async Task<bool> Handle(DeleteAccountCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteAccountCommand request, CancellationToken cancellationToken)
         {
-            return await accountService.Delete(request, cancellationToken);
+            await accountService.Delete(request, cancellationToken);
+            return Unit.Value;
         }
     }
 }

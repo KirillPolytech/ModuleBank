@@ -4,11 +4,12 @@ using MediatR;
 namespace BankAccount.Features.Accounts.Transfer
 {
     public class TransferCommandHandler(IAccountService accountService)
-        : IRequestHandler<TransferCommand, bool>
+        : IRequestHandler<TransferCommand, Unit>
     {
-        public async Task<bool> Handle(TransferCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(TransferCommand request, CancellationToken cancellationToken)
         {
-            return await accountService.Transfer(request, cancellationToken);
+            await accountService.Transfer(request, cancellationToken);
+            return Unit.Value;
         }
     }
 }

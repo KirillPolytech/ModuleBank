@@ -4,11 +4,12 @@ using MediatR;
 namespace BankAccount.Features.Accounts.RegisterTransaction
 {
     public class RegisterTransactionCommandHandler(IAccountService accountService)
-        : IRequestHandler<RegisterTransactionCommand, bool>
+        : IRequestHandler<RegisterTransactionCommand, Unit>
     {
-        public async Task<bool> Handle(RegisterTransactionCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(RegisterTransactionCommand request, CancellationToken cancellationToken)
         {
-            return await accountService.RegisterTransaction(request, cancellationToken);
+            await accountService.RegisterTransaction(request, cancellationToken);
+            return Unit.Value;
         }
     }
 }

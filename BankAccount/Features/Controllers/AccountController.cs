@@ -28,12 +28,12 @@ namespace BankAccount.Features.Controllers
         /// <remarks>Authorization is required.</remarks>
         [ProducesResponseType(typeof(ActionResult<MbResult<AccountDto>>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize]
+        //[Authorize]
         [HttpPost("create")]
-        public async Task<MbResult<AccountDto>> CreateAccount([FromBody] CreateAccountCommand request)
+        public async Task<IActionResult> CreateAccount([FromBody] CreateAccountCommand request)
         {
             var newAccount = await mediator.Send(request);
-            return MbResult<AccountDto>.Ok(newAccount);
+            return Ok(MbResult<AccountDto>.Ok(newAccount));
         }
 
         /// <summary>
@@ -49,10 +49,10 @@ namespace BankAccount.Features.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
         [HttpPut("{accountId:guid}")]
-        public async Task<ActionResult<MbResult<bool>>> UpdateAccount(Guid accountId, [FromBody] UpdateAccountCommand request)
+        public async Task<IActionResult> UpdateAccount(Guid accountId, [FromBody] UpdateAccountCommand request)
         {
             var result = await mediator.Send(request);
-            return MbResult<bool>.Ok(result);
+            return Ok(MbResult<bool>.Ok(true));
         }
 
         /// <summary>
@@ -67,10 +67,10 @@ namespace BankAccount.Features.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
         [HttpDelete("{accountId:guid}")]
-        public async Task<MbResult<bool>> DeleteAccount(Guid accountId)
+        public async Task<IActionResult> DeleteAccount(Guid accountId)
         {
             var result = await mediator.Send(new DeleteAccountCommand(accountId));
-            return MbResult<bool>.Ok(result);
+            return Ok(MbResult<bool>.Ok(true));
         }
 
         /// <summary>
@@ -85,10 +85,10 @@ namespace BankAccount.Features.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
         [HttpGet("{accountId:guid}")]
-        public async Task<MbResult<AccountDto>> GetAccount([FromRoute] Guid accountId)
+        public async Task<IActionResult> GetAccount([FromRoute] Guid accountId)
         {
             var account = await mediator.Send(new GetAccountQuery(accountId));
-            return MbResult<AccountDto>.Ok(account!);
+            return Ok(MbResult<AccountDto>.Ok(account!));
         }
 
         /// <summary>
@@ -103,10 +103,10 @@ namespace BankAccount.Features.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
         [HttpGet("getAccounts")]
-        public async Task<MbResult<List<AccountDto>>> GetAccounts([FromQuery] Guid ownerId)
+        public async Task<IActionResult> GetAccounts([FromQuery] Guid ownerId)
         {
             var accounts = await mediator.Send(new GetAccountsQuery(ownerId));
-            return MbResult<List<AccountDto>>.Ok(accounts);
+            return Ok(MbResult<List<AccountDto>>.Ok(accounts));
         }
 
         /// <summary>
@@ -121,10 +121,10 @@ namespace BankAccount.Features.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
         [HttpGet("{accountGuid:guid}/exists")]
-        public async Task<MbResult<bool>> CheckAccountExists(Guid accountGuid)
+        public async Task<IActionResult> CheckAccountExists(Guid accountGuid)
         {
             var account = await mediator.Send(new CheckAccountExistsQuery(accountGuid));
-            return MbResult<bool>.Ok(account);
+            return Ok(MbResult<bool>.Ok(account));
         }
 
         /// <summary>
@@ -140,10 +140,10 @@ namespace BankAccount.Features.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
         [HttpPatch("{accountId:guid}")]
-        public async Task<MbResult<bool>> PatchAccount(Guid accountId, [FromBody] PatchAccountCommand request)
+        public async Task<IActionResult> PatchAccount(Guid accountId, [FromBody] PatchAccountCommand request)
         {
             var result = await mediator.Send(request with { AccountId = accountId });
-            return MbResult<bool>.Ok(result);
+            return Ok(MbResult<bool>.Ok(true));
         }
 
         /// <summary>
@@ -160,11 +160,11 @@ namespace BankAccount.Features.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
         [HttpGet("{accountId:guid}/statement")]
-        public async Task<MbResult<List<Transaction?>>> GetAccountStatement(
+        public async Task<IActionResult> GetAccountStatement(
             Guid accountId, [FromQuery] DateTime from, [FromQuery] DateTime to)
         {
             var transactions = await mediator.Send(new GetStatementQuery(accountId, from, to));
-            return MbResult<List<Transaction?>>.Ok(transactions!);
+            return Ok(MbResult<List<Transaction?>>.Ok(transactions!));
         }
     }
 }
