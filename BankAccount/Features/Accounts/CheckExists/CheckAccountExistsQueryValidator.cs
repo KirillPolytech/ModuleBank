@@ -12,7 +12,7 @@ namespace BankAccount.Features.Accounts.CheckExists
                 .NotEmpty()
                 .WithMessage("AccountGuid must not be empty")
                 .MustAsync(async (accountGuid, cancellationToken) =>
-                    await accountService.GetById(accountGuid, cancellationToken) != null)
+                    await accountService.Exists(accountGuid, cancellationToken) == false)
                 .WithMessage("AccountGuid must refer to an existing account");
         }
     }

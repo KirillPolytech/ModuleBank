@@ -1,4 +1,6 @@
-﻿using BankAccount.Persistence.Db;
+﻿// ReSharper disable RedundantUsingDirective
+// Wrongly flagged by Resharper.
+using BankAccount.Persistence.Db;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -49,7 +51,7 @@ namespace BankAccount.BankAccount.UnitTests
 
                 services.AddAuthentication("TestScheme")
                     .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
-                        "TestScheme", options => { });
+                        "TestScheme", _ => { });
 
                 services.PostConfigure<AuthenticationOptions>(options =>
                 {

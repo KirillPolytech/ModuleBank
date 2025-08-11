@@ -35,6 +35,11 @@ namespace BankAccount.Services.InMemory
             return await Task.FromResult(_accountRepository.Accounts.First(x => x.Id == accountGuid));
         }
 
+        public Task<bool> Exists(Guid accountGuid, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task AccrueInterestForAllAccountsAsync()
         {
             return Task.CompletedTask;

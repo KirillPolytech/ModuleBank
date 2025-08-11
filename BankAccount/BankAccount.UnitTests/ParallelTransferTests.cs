@@ -25,10 +25,8 @@ namespace BankAccount.BankAccount.UnitTests
             var content = new StringContent("{}", Encoding.UTF8, "application/json");
             var postResponse = await _client.PostAsync("/Account/create", content);
 
-            var responseBody = await response.Content.ReadAsStringAsync();
+            await response.Content.ReadAsStringAsync();
             Assert.NotEqual(System.Net.HttpStatusCode.NotFound, response.StatusCode);
-            Console.WriteLine(responseBody);
-
             Assert.NotEqual(System.Net.HttpStatusCode.NotFound, postResponse.StatusCode);
         }
 
@@ -78,7 +76,7 @@ namespace BankAccount.BankAccount.UnitTests
             };
 
             var content = new StringContent(JsonSerializer.Serialize(transferData), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync("/transaction/transfer", content);
+            await _client.PostAsync("/transaction/transfer", content);
         }
 
         private async Task CreateAccountIfNotExists(string accountId)
@@ -102,7 +100,7 @@ namespace BankAccount.BankAccount.UnitTests
                 var content = new StringContent(
                     JsonSerializer.Serialize(createAccountCommand), Encoding.UTF8, "application/json");
 
-                var createResponse = await _client.PostAsync("http://localhost:5000/Account/create", content);
+                await _client.PostAsync("http://localhost:5000/Account/create", content);
             }
         }
     }

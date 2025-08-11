@@ -1,4 +1,5 @@
-﻿using BankAccount.Features.Models.Enums;
+﻿using BankAccount.Features.ExceptionValidation;
+using BankAccount.Features.Models.Enums;
 using BankAccount.Services.Interfaces;
 using FluentValidation;
 
@@ -12,18 +13,18 @@ namespace BankAccount.Features.Accounts.Update
         {
             RuleFor(x => x.AccountDto.Id)
                 .NotEmpty()
-                .WithMessage("AccountId is required.")
+                .WithMessage(x => ValidationMessages.RequiredField(nameof(x.AccountDto.Id)))
                 .MustAsync(async (accountGuid, cancellationToken)
-                    => await accountService.GetById(accountGuid, cancellationToken) != null)
-                .WithMessage("AccountId must exist.");
+                    => (await accountService.GetById(accountGuid, cancellationToken)) != null)
+                .WithMessage(x => ValidationMessages.MustExistsField(nameof(x.AccountDto.Id)));
 
 
             RuleFor(x => x.AccountDto.OwnerId)
                 .NotEmpty()
-                .WithMessage("OwnerId is required.")
+                .WithMessage(x => ValidationMessages.RequiredField(nameof(x.AccountDto.OwnerId)))
                 .MustAsync(async (ownerId, cancellationToken) 
                     => await clientVerificationService.OwnerExistsAsync(ownerId, cancellationToken))
-                .WithMessage("OwnerId must exist.");
+                .WithMessage(x => ValidationMessages.MustExistsField(nameof(x.AccountDto.OwnerId)));
 
             RuleFor(x => x.AccountDto.Type)
                 .IsInEnum().WithMessage("Invalid account type.");

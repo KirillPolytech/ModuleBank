@@ -1,4 +1,5 @@
-﻿using BankAccount.Features.Models.Enums;
+﻿using System.ComponentModel.DataAnnotations;
+using BankAccount.Features.Models.Enums;
 
 namespace BankAccount.Features.Models
 {
@@ -40,6 +41,7 @@ namespace BankAccount.Features.Models
         /// <summary>
         /// Description or purpose of the transaction
         /// </summary>
+        [MaxLength(500)] 
         public required string Description { get; set; }
 
         /// <summary>

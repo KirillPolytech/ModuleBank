@@ -58,7 +58,7 @@ namespace BankAccount.Features.Controllers
         [HttpPut("{accountId:guid}")]
         public async Task<IActionResult> UpdateAccount(Guid accountId, [FromBody] UpdateAccountCommand request)
         {
-            var result = await _mediator.Send(request);
+            await _mediator.Send(request);
             return Ok(MbResult<bool>.Ok(true));
         }
 
@@ -76,7 +76,7 @@ namespace BankAccount.Features.Controllers
         [HttpDelete("{accountId:guid}")]
         public async Task<IActionResult> DeleteAccount(Guid accountId)
         {
-            var result = await _mediator.Send(new DeleteAccountCommand(accountId));
+            await _mediator.Send(new DeleteAccountCommand(accountId));
             return Ok(MbResult<bool>.Ok(true));
         }
 
@@ -149,7 +149,7 @@ namespace BankAccount.Features.Controllers
         [HttpPatch("{accountId:guid}")]
         public async Task<IActionResult> PatchAccount(Guid accountId, [FromBody] PatchAccountCommand request)
         {
-            var result = await _mediator.Send(request with { AccountId = accountId });
+            await _mediator.Send(request with { AccountId = accountId });
             return Ok(MbResult<bool>.Ok(true));
         }
 

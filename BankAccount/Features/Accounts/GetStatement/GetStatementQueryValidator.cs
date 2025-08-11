@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using BankAccount.Features.ExceptionValidation;
+using FluentValidation;
 
 namespace BankAccount.Features.Accounts.GetStatement
 {
@@ -8,7 +9,7 @@ namespace BankAccount.Features.Accounts.GetStatement
         {
             RuleFor(x => x.AccountId)
                 .NotEmpty()
-                .WithMessage("AccountId must exist");
+                .WithMessage(x => ValidationMessages.RequiredField(nameof(x.AccountId)));
         }
     }
 }

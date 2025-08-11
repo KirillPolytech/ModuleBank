@@ -19,9 +19,9 @@ namespace BankAccount.Features.Accounts.RegisterTransaction
 
             RuleFor(x => x.TransactionDto.Timestamp)
                 .NotEmpty()
-                .WithMessage("Timestamp is required.")
+                .WithMessage(x => ValidationMessages.RequiredField(nameof(x.TransactionDto.Timestamp)))
                 .LessThanOrEqualTo(DateTime.UtcNow)
-                .WithMessage("Timestamp cannot be in the future.");
+                .WithMessage(ValidationMessages.TimestampCannotBeInTheFuture);
 
             RuleFor(x => x.TransactionDto.Description)
                 .MaximumLength(500)
