@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using BankAccount.Features.Models.Enums;
+﻿using BankAccount.Features.Models.Enums;
+using System.ComponentModel;
 
 namespace BankAccount.Features.Models.DTOs
 {
@@ -28,7 +28,6 @@ namespace BankAccount.Features.Models.DTOs
         /// <summary>
         /// Currency of the account.
         /// </summary>
-        [DefaultValue(CurrencyType.Rub)]
         public required CurrencyType Currency { get; set; }
 
         /// <summary>

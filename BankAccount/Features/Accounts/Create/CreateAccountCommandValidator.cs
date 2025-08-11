@@ -1,4 +1,6 @@
-﻿using BankAccount.Features.Models.Enums;
+﻿using BankAccount.Features.ExceptionValidation;
+using BankAccount.Features.Models.Enums;
+using BankAccount.Persistence.Db;
 using BankAccount.Services.Interfaces;
 using FluentValidation;
 
@@ -8,26 +10,27 @@ namespace BankAccount.Features.Accounts.Create
     {
         public CreateAccountCommandValidator(
             IClientVerificationService clientVerificationService,
-            ICurrencyService currencyService)
+            ICurrencyService currencyService,
+            AppDbContext dbContext)
         {
             RuleFor(x => x.AccountDto.OwnerId)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
-                .WithMessage("OwnerId must not be empty");
+                .WithMessage(x => ValidationMessages.RequiredField(nameof(x.AccountDto.OwnerId)));
 
             RuleFor(x => x.AccountDto.OwnerId)
                 .MustAsync(async (ownerId, cancellation) =>
                     await clientVerificationService.OwnerExistsAsync(ownerId, cancellation))
-                .WithMessage("OwnerId must refer to an existing owner");
+                .WithMessage(ValidationMessages.OwnerIdMustReferToAnExistingOwner);
 
             RuleFor(x => x.AccountDto.Currency)
                 .MustAsync(async (currency, cancellation) =>
                     await currencyService.IsCurrencySupported(currency, cancellation))
-                .WithMessage("CurrencyType is not supported");
+                .WithMessage(ValidationMessages.CurrencyTypeNotSupported);
 
             RuleFor(x => x.AccountDto.Type)
                 .IsInEnum()
-                .WithMessage("Account type is not valid");
+                .WithMessage(ValidationMessages.AccountTypeIsNotValid);
 
             RuleFor(x => x.AccountDto.InterestRate)
                 .Must((cmd, interest) =>
@@ -37,11 +40,11 @@ namespace BankAccount.Features.Accounts.Create
                         ? interest.HasValue
                         : interest is null or 0;
                 })
-                .WithMessage("InterestRate must be set only for Deposit and Credit accounts");
+                .WithMessage(ValidationMessages.InterestRateMustBeSetOnlyForDepositAndCreditAccounts);
 
             RuleFor(x => x.AccountDto.OpenDate)
                 .LessThanOrEqualTo(DateTime.UtcNow)
-                .WithMessage("OpenDate cannot be in the future");
+                .WithMessage(ValidationMessages.OpenDateCannotBeInTheFuture);
         }
     }
 }
