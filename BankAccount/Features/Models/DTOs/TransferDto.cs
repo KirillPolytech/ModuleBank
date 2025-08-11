@@ -8,16 +8,21 @@
         /// <summary>
         /// The unique identifier of the account to transfer funds from.
         /// </summary>
-        public Guid From { get; set; }
+        public required Guid From { get; set; }
 
         /// <summary>
         /// The unique identifier of the account to transfer funds to.
         /// </summary>
-        public Guid To { get; set; }
+        public required Guid To { get; set; }
 
         /// <summary>
         /// The amount of money to transfer.
         /// </summary>
-        public decimal Amount { get; set; }
+        public required decimal Amount { get; set; }
+
+        /// <summary>
+        /// The description of transaction.
+        /// </summary>
+        public required string Description { get; set; }
     }
 }

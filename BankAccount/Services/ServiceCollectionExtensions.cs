@@ -1,28 +1,28 @@
 ﻿using BankAccount.Features.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 
 namespace BankAccount.Services
 {
     internal static class ServiceCollectionExtensions
     {
         internal static void AddSwaggerGen(
-            SwaggerGenOptions options, 
-            WebApplicationBuilder builder)
+            SwaggerGenOptions options,
+            IConfiguration configuration)
         {
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
             options.IncludeXmlComments(xmlPath);
             options.EnableAnnotations();
 
-            var authority = builder.Configuration["Jwt:Authority"];
-            var tokenAuthority = builder.Configuration["Jwt:TokenAuthority"];
-            var auth = builder.Configuration["Jwt:AuthUrl"];
+            var authority = configuration["Jwt:Authority"];
+            var tokenAuthority = configuration["Jwt:TokenAuthority"];
+            var auth = configuration["Jwt:AuthUrl"];
 
             if (string.IsNullOrEmpty(authority))
                 throw new InvalidOperationException("Jwt:Authority configuration is missing.");
@@ -40,7 +40,7 @@ namespace BankAccount.Services
                 {
                     AuthorizationCode = new OpenApiOAuthFlow
                     {
-                        AuthorizationUrl = new Uri(auth),//$"{authority}/protocol/openid-connect/auth"),
+                        AuthorizationUrl = new Uri(auth),
                         TokenUrl = new Uri(tokenAuthority),
                         Scopes = new Dictionary<string, string>
                         {
@@ -67,18 +67,18 @@ namespace BankAccount.Services
             });
         }
 
-        internal static void AddAuthentication(JwtBearerOptions options, WebApplicationBuilder builder)
+        internal static void AddAuthentication(JwtBearerOptions options, IConfiguration configuration)
         {
             options.RequireHttpsMetadata = false;
-            options.Audience = "account"; //builder.Configuration["Jwt:Audience"];
+            options.Audience = "account"; //configuration.Configuration["Jwt:Audience"];
 
-            options.Authority = builder.Configuration["Jwt:Authority"];
+            options.Authority = configuration["Jwt:Authority"];
 
-            options.MetadataAddress = builder.Configuration["Jwt:MetadataAddress"]!;
+            options.MetadataAddress = configuration["Jwt:MetadataAddress"]!;
 
             options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidIssuer = builder.Configuration["Jwt:ValidIssuer"],
+                ValidIssuer = configuration["Jwt:ValidIssuer"],
             };
         }
 

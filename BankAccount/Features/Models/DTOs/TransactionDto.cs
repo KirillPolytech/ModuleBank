@@ -13,6 +13,12 @@ namespace BankAccount.Features.Models.DTOs
         public required Guid AccountId { get; set; }
 
         /// <summary>
+        /// Optional identifier of the counterparty's account involved in the transaction
+        /// </summary>
+        public Guid? CounterpartyAccountId { get; set; }
+
+
+        /// <summary>
         /// The amount of the transaction.
         /// </summary>
         public required decimal Amount { get; set; }
