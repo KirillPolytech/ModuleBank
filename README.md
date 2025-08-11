@@ -28,8 +28,8 @@
 }
 ````
 
-### 3. Запустить сервис
-
+### 3. Запуск сервиса
+Зайти в папку с проектом \ModuleBank_Task_1
 ```bash
 dotnet run --project BankAccount
 ```
@@ -59,8 +59,8 @@ docker compose up --build
 
 ```
 BankAccount/             # Исходный код сервиса
-docker-compose.yml       # Конфигурация сервисов
 BankAccount/Dockerfile   # Сборка контейнера BankAccount API
+docker-compose.yml       # Конфигурация сервисов
 README.md                # Документация проекта
 ```
 
@@ -72,8 +72,7 @@ README.md                # Документация проекта
 
 ### Запуск тестов в IDE
 
-- Откройте решение в вашей IDE (Visual Studio, Rider, VS Code с плагином C#).
-- Найдите проект с тестами — обычно он называется `BankAccount.Tests`.
+- Откройте решение в вашей IDE.
 - Запустите все тесты через встроенный тестовый раннер:
   - В **Visual Studio**: меню *Test* → *Run All Tests* или панель тестов.
   - В **Rider**: окно *Unit Tests* → *Run All*.
