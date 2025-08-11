@@ -27,13 +27,7 @@
 }
 ````
 
-### 3. Применить миграции
-
-```bash
-dotnet ef database update
-```
-
-### 4. Запустить сервис
+### 3. Запустить сервис
 
 ```bash
 dotnet run --project BankAccount
@@ -58,12 +52,6 @@ docker compose up --build
 * **Keycloak** → [http://localhost:18080](http://localhost:18080) (логин: `admin`, пароль: `admin`)
 * **PostgreSQL** → `localhost:5432` (user: `postgres`, password: `qwerty123`, db: `mydb`)
 
-### 3. Применить миграции в контейнере (если нужно вручную)
-
-```bash
-docker exec -it bank-api-1 dotnet ef database update --connection "Host=db;Port=5432;Database=mydb;Username=postgres;Password=qwerty123"
-```
-
 ---
 
 ## 📂 Структура проекта
@@ -76,17 +64,3 @@ README.md            # Документация проекта
 ```
 
 ---
-
-## 🛠 Полезные команды
-
-### Подключиться к PostgreSQL внутри контейнера
-
-```bash
-docker exec -it modulebank_task_1-db-1 psql -U postgres -d mydb
-```
-
-### Просмотреть логи сервиса
-
-```bash
-docker logs bank-api-1
-```
