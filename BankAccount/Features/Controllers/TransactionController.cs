@@ -26,10 +26,10 @@ namespace BankAccount.Features.Controllers
         /// <returns>Boolean indicating whether the transaction was registered successfully.</returns>
         /// <response code="200">Transaction registered successfully.</response>
         /// <response code="400">Bad request due to invalid input data.</response>
-        /// <remarks>Authorization is required.</remarks>        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        /// <remarks>Authorization is required.</remarks>        [ProducesResponseType(typeof(IActionResult), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
-        [HttpGet("{accountId:guid}/transactions")]
+        [HttpPost("{accountId:guid}/transactions")]
         public async Task<IActionResult> RegisterTransaction(Guid accountId, TransactionDto transferDto)
         {
             var transactions = await _mediator.Send(new RegisterTransactionCommand(transferDto));
@@ -44,14 +44,14 @@ namespace BankAccount.Features.Controllers
         /// <response code="200">Transfer completed successfully.</response>
         /// <response code="400">Bad request due to invalid input data.</response>
         /// <remarks>Authorization is required.</remarks>
-        [ProducesResponseType(typeof(MbResult<bool>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IActionResult), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
         [HttpPost("transfer")]
-        public async Task<MbResult<bool>> Transfer([FromBody] TransferDto transferDto)
+        public async Task<IActionResult> Transfer([FromBody] TransferDto transferDto)
         {
             await _mediator.Send(new TransferCommand(transferDto));
-            return MbResult<bool>.Ok(true);
+            return Ok(MbResult<bool>.Ok(true));
         }
     }
 }

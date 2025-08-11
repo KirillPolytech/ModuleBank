@@ -47,6 +47,12 @@ namespace BankAccount.Persistence.Db.EntityTypeConfigurations
             builder.HasOne<Account>()
                 .WithMany()
                 .HasForeignKey(t => t.CounterpartyAccountId);
+
+            builder.HasIndex(t => new { t.AccountId, t.Timestamp })
+                .HasDatabaseName("ix_transactions_accountid_timestamp");
+
+            builder.HasIndex(t => t.Timestamp)
+                .HasDatabaseName("ix_transactions_timestamp_btree");
         }
     }
 }

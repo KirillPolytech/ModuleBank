@@ -1,11 +1,16 @@
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS final
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 
+COPY *.csproj ./
+RUN dotnet restore
+
 COPY . ./
+RUN dotnet build -c Release
+RUN dotnet publish -c Release -o /app/publish --no-build
 
-RUN dotnet tool install --global dotnet-ef --version 9.0.8
-ENV PATH="$PATH:/root/.dotnet/tools"
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
+WORKDIR /app
 
-EXPOSE 80
+COPY --from=build /app/publish ./
 
-ENTRYPOINT ["sh", "-c", "dotnet ef database update --connection \"$ConnectionStrings__DefaultConnection\" && dotnet run --no-build --urls http://+:80"]
+ENTRYPOINT ["sh", "-c", "dotnet BankAccount.dll"]

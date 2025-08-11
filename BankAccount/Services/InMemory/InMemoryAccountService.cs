@@ -30,9 +30,14 @@ namespace BankAccount.Services.InMemory
                     .ToList());
         }
 
-        public async Task<Account?> GetById(Guid accountGuid, CancellationToken cancellationToken)
+        public async Task<Account> GetById(Guid accountGuid, CancellationToken cancellationToken)
         {
-            return await Task.FromResult(_accountRepository.Accounts.FirstOrDefault(x => x.Id == accountGuid));
+            return await Task.FromResult(_accountRepository.Accounts.First(x => x.Id == accountGuid));
+        }
+
+        public Task AccrueInterestForAllAccountsAsync()
+        {
+            return Task.CompletedTask;
         }
 
         public async Task Create(Account request, CancellationToken cancellationToken)

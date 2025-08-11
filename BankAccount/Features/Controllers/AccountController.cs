@@ -16,8 +16,15 @@ namespace BankAccount.Features.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AccountController(IMediator mediator) : ControllerBase
+    public class AccountController : ControllerBase
     {
+        private readonly IMediator _mediator;
+
+        public AccountController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         /// <summary>
         /// Creates a new account based on the provided request data.
         /// </summary>
@@ -28,11 +35,11 @@ namespace BankAccount.Features.Controllers
         /// <remarks>Authorization is required.</remarks>
         [ProducesResponseType(typeof(ActionResult<MbResult<AccountDto>>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[Authorize]
+        [Authorize]
         [HttpPost("create")]
         public async Task<IActionResult> CreateAccount([FromBody] CreateAccountCommand request)
         {
-            var newAccount = await mediator.Send(request);
+            var newAccount = await _mediator.Send(request);
             return Ok(MbResult<AccountDto>.Ok(newAccount));
         }
 
@@ -51,7 +58,7 @@ namespace BankAccount.Features.Controllers
         [HttpPut("{accountId:guid}")]
         public async Task<IActionResult> UpdateAccount(Guid accountId, [FromBody] UpdateAccountCommand request)
         {
-            var result = await mediator.Send(request);
+            var result = await _mediator.Send(request);
             return Ok(MbResult<bool>.Ok(true));
         }
 
@@ -69,7 +76,7 @@ namespace BankAccount.Features.Controllers
         [HttpDelete("{accountId:guid}")]
         public async Task<IActionResult> DeleteAccount(Guid accountId)
         {
-            var result = await mediator.Send(new DeleteAccountCommand(accountId));
+            var result = await _mediator.Send(new DeleteAccountCommand(accountId));
             return Ok(MbResult<bool>.Ok(true));
         }
 
@@ -87,7 +94,7 @@ namespace BankAccount.Features.Controllers
         [HttpGet("{accountId:guid}")]
         public async Task<IActionResult> GetAccount([FromRoute] Guid accountId)
         {
-            var account = await mediator.Send(new GetAccountQuery(accountId));
+            var account = await _mediator.Send(new GetAccountQuery(accountId));
             return Ok(MbResult<AccountDto>.Ok(account!));
         }
 
@@ -105,7 +112,7 @@ namespace BankAccount.Features.Controllers
         [HttpGet("getAccounts")]
         public async Task<IActionResult> GetAccounts([FromQuery] Guid ownerId)
         {
-            var accounts = await mediator.Send(new GetAccountsQuery(ownerId));
+            var accounts = await _mediator.Send(new GetAccountsQuery(ownerId));
             return Ok(MbResult<List<AccountDto>>.Ok(accounts));
         }
 
@@ -123,7 +130,7 @@ namespace BankAccount.Features.Controllers
         [HttpGet("{accountGuid:guid}/exists")]
         public async Task<IActionResult> CheckAccountExists(Guid accountGuid)
         {
-            var account = await mediator.Send(new CheckAccountExistsQuery(accountGuid));
+            var account = await _mediator.Send(new CheckAccountExistsQuery(accountGuid));
             return Ok(MbResult<bool>.Ok(account));
         }
 
@@ -142,7 +149,7 @@ namespace BankAccount.Features.Controllers
         [HttpPatch("{accountId:guid}")]
         public async Task<IActionResult> PatchAccount(Guid accountId, [FromBody] PatchAccountCommand request)
         {
-            var result = await mediator.Send(request with { AccountId = accountId });
+            var result = await _mediator.Send(request with { AccountId = accountId });
             return Ok(MbResult<bool>.Ok(true));
         }
 
@@ -163,7 +170,7 @@ namespace BankAccount.Features.Controllers
         public async Task<IActionResult> GetAccountStatement(
             Guid accountId, [FromQuery] DateTime from, [FromQuery] DateTime to)
         {
-            var transactions = await mediator.Send(new GetStatementQuery(accountId, from, to));
+            var transactions = await _mediator.Send(new GetStatementQuery(accountId, from, to));
             return Ok(MbResult<List<Transaction?>>.Ok(transactions!));
         }
     }

@@ -19,6 +19,8 @@ namespace BankAccount.Services.Interfaces
         Task<bool> HasAccount(Guid ownerId, CancellationToken cancellationToken);
         Task<bool> HasAccount(Guid ownerId, Guid accountGuid, CancellationToken cancellationToken);
 
-        Task<Account?> GetById(Guid accountGuid, CancellationToken cancellationToken);
+        Task<Account> GetById(Guid accountGuid, CancellationToken cancellationToken);
+
+        Task AccrueInterestForAllAccountsAsync();
     }
 }

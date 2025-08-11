@@ -9,7 +9,7 @@ namespace BankAccount.Features.Accounts.Transfer
         {
             RuleFor(x => x.TransferDto.Amount)
                 .NotEqual(0)
-                .WithMessage("Amount must not be zero.");
+                .WithMessage("Amount must greater than 0.");
 
             RuleFor(x => x.TransferDto.From)
                 .NotEmpty()

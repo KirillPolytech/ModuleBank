@@ -19,8 +19,7 @@ services:
     command: >
       sh -c "
         dotnet ef database update --connection \"$ConnectionStrings__DefaultConnection\" &&
-        dotnet BankAccount.dll
-      "
+        dotnet BankAccount.dll"
 
   keycloak:
     image: quay.io/keycloak/keycloak:21.1.1

@@ -1,4 +1,6 @@
 ﻿using BankAccount.Features.Models.Enums;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BankAccount.Features.Models
 {
@@ -51,5 +53,9 @@ namespace BankAccount.Features.Models
         /// List of transactions associated with this account
         /// </summary>
         public List<Transaction> Transactions { get; set; } = [];
+
+        [Timestamp]
+        [Column("xmin")]
+        public uint Version { get; set; }
     }
 }
