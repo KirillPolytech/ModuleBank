@@ -4,7 +4,6 @@ using System.Text.Json;
 using BankAccount.Features.Accounts.Create;
 using BankAccount.Features.Models.DTOs;
 using BankAccount.Features.Models.Enums;
-using Xunit;
 
 namespace BankAccount.BankAccount.UnitTests
 {

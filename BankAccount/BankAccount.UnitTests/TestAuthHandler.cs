@@ -8,6 +8,7 @@ namespace BankAccount.BankAccount.UnitTests
 {
     public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
+        [Obsolete("Obsolete")]
         public TestAuthHandler(
             IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
