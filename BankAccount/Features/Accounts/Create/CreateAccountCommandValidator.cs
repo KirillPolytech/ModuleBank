@@ -1,6 +1,5 @@
 ﻿using BankAccount.Features.ExceptionValidation;
 using BankAccount.Features.Models.Enums;
-using BankAccount.Persistence.Db;
 using BankAccount.Services.Interfaces;
 using FluentValidation;
 
@@ -10,8 +9,7 @@ namespace BankAccount.Features.Accounts.Create
     {
         public CreateAccountCommandValidator(
             IClientVerificationService clientVerificationService,
-            ICurrencyService currencyService,
-            AppDbContext dbContext)
+            ICurrencyService currencyService)
         {
             RuleFor(x => x.AccountDto.OwnerId)
                 .Cascade(CascadeMode.Stop)

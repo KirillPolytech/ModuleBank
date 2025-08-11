@@ -42,6 +42,15 @@ namespace BankAccount.Services
             return result;
         }
 
+        public async Task<bool> Exists(Guid accountGuid, CancellationToken cancellationToken)
+        {
+            var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+
+            var result = await context.Accounts.FirstOrDefaultAsync(x => x.Id == accountGuid, cancellationToken);
+
+            return result is null;
+        }
+
         public async Task Create(Account request, CancellationToken cancellationToken)
         {
             var context = await _contextFactory.CreateDbContextAsync(cancellationToken);

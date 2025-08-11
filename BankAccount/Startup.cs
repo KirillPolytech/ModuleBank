@@ -29,6 +29,7 @@ namespace BankAccount
             Environment = environment;
         }
 
+        [Obsolete("Obsolete")]
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHangfire(config =>

@@ -20,6 +20,7 @@ namespace BankAccount.Services.Interfaces
         Task<bool> HasAccount(Guid ownerId, Guid accountGuid, CancellationToken cancellationToken);
 
         Task<Account> GetById(Guid accountGuid, CancellationToken cancellationToken);
+        Task<bool> Exists(Guid accountGuid, CancellationToken cancellationToken);
 
         Task AccrueInterestForAllAccountsAsync();
     }

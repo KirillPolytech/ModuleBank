@@ -1,4 +1,5 @@
-﻿using BankAccount.Services.Interfaces;
+﻿using BankAccount.Features.ExceptionValidation;
+using BankAccount.Services.Interfaces;
 using FluentValidation;
 
 namespace BankAccount.Features.Accounts.Transfer
@@ -13,11 +14,11 @@ namespace BankAccount.Features.Accounts.Transfer
 
             RuleFor(x => x.TransferDto.From)
                 .NotEmpty()
-                .WithMessage("From account is required.");
+                .WithMessage(x => ValidationMessages.RequiredField(nameof(x.TransferDto.From)));
 
             RuleFor(x => x.TransferDto.To)
                 .NotEmpty()
-                .WithMessage("To account is required.");
+                .WithMessage(x => ValidationMessages.RequiredField(nameof(x.TransferDto.To)));
 
             RuleFor(x => x.TransferDto)
                 .NotEmpty()
@@ -28,9 +29,6 @@ namespace BankAccount.Features.Accounts.Transfer
                     {
                         var fromAccount = await accountService.GetById(dto.From, cancellationToken);
                         var toAccount = await accountService.GetById(dto.To, cancellationToken);
-
-                        if (fromAccount == null || toAccount == null)
-                            return false;
 
                         return fromAccount.CurrencyType == toAccount.CurrencyType;
                     })

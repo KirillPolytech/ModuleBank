@@ -6,9 +6,9 @@ namespace BankAccount.Features.Accounts.CheckExists
     public class CheckAccountExistsQueryHandler(IAccountService accountService)
         : IRequestHandler<CheckAccountExistsQuery, bool>
     {
-        public Task<bool> Handle(CheckAccountExistsQuery request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CheckAccountExistsQuery request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(accountService.GetById(request.AccountGuid, cancellationToken).Result is not null);
+            return await accountService.Exists(request.AccountGuid, cancellationToken);
         }
     }
 }
