@@ -1,7 +1,6 @@
-﻿namespace BankAccount.Services.Interfaces
+﻿namespace BankAccount.Services.Interfaces;
+
+public interface IClientVerificationService
 {
-    public interface IClientVerificationService
-    {
-        public Task<bool> OwnerExistsAsync(Guid ownerGuid, CancellationToken cancellationToken);
-    }
+    public Task<bool> OwnerExistsAsync(Guid ownerGuid, CancellationToken cancellationToken);
 }

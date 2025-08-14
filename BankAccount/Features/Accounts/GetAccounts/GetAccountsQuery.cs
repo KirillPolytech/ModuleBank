@@ -1,7 +1,6 @@
 ﻿using BankAccount.Features.Models.DTOs;
 using MediatR;
 
-namespace BankAccount.Features.Accounts.GetAccounts
-{
-    public record GetAccountsQuery(Guid OwnerGuid) : IRequest<List<AccountDto>>;
-}
+namespace BankAccount.Features.Accounts.GetAccounts;
+
+public record GetAccountsQuery(Guid OwnerGuid) : IRequest<List<AccountDto>>;

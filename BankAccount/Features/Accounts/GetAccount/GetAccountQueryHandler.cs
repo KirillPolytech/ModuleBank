@@ -3,15 +3,14 @@ using BankAccount.Services.Interfaces;
 using Mapster;
 using MediatR;
 
-namespace BankAccount.Features.Accounts.GetAccount
+namespace BankAccount.Features.Accounts.GetAccount;
+
+public class GetAccountQueryHandler(IAccountService accountService)
+    : IRequestHandler<GetAccountQuery, AccountDto?>
 {
-    public class GetAccountQueryHandler(IAccountService accountService)
-        : IRequestHandler<GetAccountQuery, AccountDto?>
+    public async Task<AccountDto?> Handle(GetAccountQuery request, CancellationToken cancellationToken)
     {
-        public async Task<AccountDto?> Handle(GetAccountQuery request, CancellationToken cancellationToken)
-        {
-            var account = await accountService.GetById(request.AccountGuid, cancellationToken);
-            return account.Adapt<AccountDto?>();
-        }
+        var account = await accountService.GetById(request.AccountGuid, cancellationToken);
+        return account.Adapt<AccountDto?>();
     }
 }

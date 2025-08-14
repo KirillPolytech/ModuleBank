@@ -2,27 +2,27 @@
 using BankAccount.Services.Interfaces;
 using FluentValidation;
 
-namespace BankAccount.Features.Accounts.Transfer
+namespace BankAccount.Features.Accounts.Transfer;
+
+public class TransferCommandValidator : AbstractValidator<TransferCommand>
 {
-    public class TransferCommandValidator : AbstractValidator<TransferCommand>
+    public TransferCommandValidator(IAccountService accountService)
     {
-        public TransferCommandValidator(IAccountService accountService)
-        {
-            RuleFor(x => x.TransferDto.Amount)
-                .NotEqual(0)
-                .WithMessage("Amount must greater than 0.");
+        RuleFor(x => x.TransferDto.Amount)
+            .NotEqual(0)
+            .WithMessage("Amount must greater than 0.");
 
-            RuleFor(x => x.TransferDto.From)
-                .NotEmpty()
-                .WithMessage(x => ValidationMessages.RequiredField(nameof(x.TransferDto.From)));
+        RuleFor(x => x.TransferDto.From)
+            .NotEmpty()
+            .WithMessage(x => ValidationMessages.RequiredField(nameof(x.TransferDto.From)));
 
-            RuleFor(x => x.TransferDto.To)
-                .NotEmpty()
-                .WithMessage(x => ValidationMessages.RequiredField(nameof(x.TransferDto.To)));
+        RuleFor(x => x.TransferDto.To)
+            .NotEmpty()
+            .WithMessage(x => ValidationMessages.RequiredField(nameof(x.TransferDto.To)));
 
-            RuleFor(x => x.TransferDto)
-                .NotEmpty()
-                .DependentRules(() =>
+        RuleFor(x => x.TransferDto)
+            .NotEmpty()
+            .DependentRules(() =>
             {
                 RuleFor(x => x.TransferDto)
                     .MustAsync(async (dto, cancellationToken) =>
@@ -35,6 +35,5 @@ namespace BankAccount.Features.Accounts.Transfer
                     .WithMessage("Sender and recipient account currencies must match.");
             });
 
-        }
     }
 }

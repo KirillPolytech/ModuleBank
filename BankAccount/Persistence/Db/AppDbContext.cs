@@ -1,24 +1,23 @@
 ﻿using BankAccount.Features.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BankAccount.Persistence.Db
-{
-    public class AppDbContext : DbContext
-    {   
-        public DbSet<Account> Accounts => Set<Account>();
-        public DbSet<Transaction> Transactions => Set<Transaction>();
+namespace BankAccount.Persistence.Db;
 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+public class AppDbContext : DbContext
+{   
+    public DbSet<Account> Accounts => Set<Account>();
+    public DbSet<Transaction> Transactions => Set<Transaction>();
 
-            base.OnModelCreating(modelBuilder);
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
-            modelBuilder.Entity<Account>()
-                .Property(p => p.Version)
-                .IsRowVersion()
-                .IsConcurrencyToken();
-        }
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Account>()
+            .Property(p => p.Version)
+            .IsRowVersion()
+            .IsConcurrencyToken();
     }
 }

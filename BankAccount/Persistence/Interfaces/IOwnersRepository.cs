@@ -1,7 +1,6 @@
-﻿namespace BankAccount.Persistence.Interfaces
+﻿namespace BankAccount.Persistence.Interfaces;
+
+public interface IOwnersRepository
 {
-    public interface IOwnersRepository
-    {
-        public List<Guid> Owners { get; set; }
-    }
+    public List<Guid> Owners { get; set; }
 }

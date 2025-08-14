@@ -1,7 +1,6 @@
-﻿namespace BankAccount.Services.Interfaces
+﻿namespace BankAccount.Services.Interfaces;
+
+public interface IHangfireJobScheduler
 {
-    public interface IHangfireJobScheduler
-    {
-        void ScheduleJobs();
-    }
+    void ScheduleJobs();
 }

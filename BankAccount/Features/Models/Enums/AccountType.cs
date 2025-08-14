@@ -1,7 +1,6 @@
-﻿namespace BankAccount.Features.Models.Enums
+﻿namespace BankAccount.Features.Models.Enums;
+
+public enum AccountType
 {
-    public enum AccountType
-    {
-        Credit, Deposit, Checking
-    }
+    Credit, Deposit, Checking
 }
