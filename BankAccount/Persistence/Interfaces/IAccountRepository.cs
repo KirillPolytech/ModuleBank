@@ -1,9 +1,8 @@
 ﻿using BankAccount.Features.Models;
 
-namespace BankAccount.Persistence.Interfaces
+namespace BankAccount.Persistence.Interfaces;
+
+public interface IAccountRepository
 {
-    public interface IAccountRepository
-    {
-        public List<Account> Accounts { get; set; }
-    }
+    public List<Account> Accounts { get; set; }
 }

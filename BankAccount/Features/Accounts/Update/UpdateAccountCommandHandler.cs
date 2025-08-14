@@ -4,16 +4,15 @@ using BankAccount.Services.Interfaces;
 using Mapster;
 using MediatR;
 
-namespace BankAccount.Features.Accounts.Update
+namespace BankAccount.Features.Accounts.Update;
+
+public class UpdateAccountCommandHandler(IAccountService accountService) 
+    : IRequestHandler<UpdateAccountCommand, Unit>
 {
-    public class UpdateAccountCommandHandler(IAccountService accountService) 
-        : IRequestHandler<UpdateAccountCommand, Unit>
+    public async Task<Unit> Handle(UpdateAccountCommand request, CancellationToken cancellationToken)
     {
-        public async Task<Unit> Handle(UpdateAccountCommand request, CancellationToken cancellationToken)
-        {
-            var account = request.AccountDto.Adapt<Account>();
-            await accountService.Patch(account.Adapt<PatchAccountDto>(), cancellationToken);
-            return Unit.Value;
-        }
+        var account = request.AccountDto.Adapt<Account>();
+        await accountService.Patch(account.Adapt<PatchAccountDto>(), cancellationToken);
+        return Unit.Value;
     }
 }

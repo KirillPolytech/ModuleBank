@@ -1,23 +1,22 @@
 ﻿using BankAccount.Services.Interfaces;
 using Hangfire;
 
-namespace BankAccount.Services
+namespace BankAccount.Services;
+
+public class HangfireJobScheduler : IHangfireJobScheduler
 {
-    public class HangfireJobScheduler : IHangfireJobScheduler
+    private readonly IRecurringJobManager _recurringJobManager;
+
+    public HangfireJobScheduler(IRecurringJobManager recurringJobManager)
     {
-        private readonly IRecurringJobManager _recurringJobManager;
+        _recurringJobManager = recurringJobManager;
+    }
 
-        public HangfireJobScheduler(IRecurringJobManager recurringJobManager)
-        {
-            _recurringJobManager = recurringJobManager;
-        }
-
-        public void ScheduleJobs()
-        {
-            _recurringJobManager.AddOrUpdate<AccountService>(
-                "accrue-interest-job",
-                service => service.AccrueInterestForAllAccountsAsync(),
-                Cron.Daily);
-        }
+    public void ScheduleJobs()
+    {
+        _recurringJobManager.AddOrUpdate<AccountService>(
+            "accrue-interest-job",
+            service => service.AccrueInterestForAllAccountsAsync(),
+            Cron.Daily);
     }
 }

@@ -1,21 +1,20 @@
 ﻿using BankAccount.Features.Models;
 using BankAccount.Persistence.Db;
 
-namespace BankAccount.UnitTests
+namespace BankAccount.UnitTests;
+
+public class TestService
 {
-    public class TestService
+    private readonly AppDbContext _dbContext;
+
+    public TestService(AppDbContext dbContext)
     {
-        private readonly AppDbContext _dbContext;
+        _dbContext = dbContext;
+    }
 
-        public TestService(AppDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
-
-        public Task<decimal> GetTotalBalanceAsync()
-        {
-            var accounts = _dbContext.Set<Account>();
-            return Task.FromResult(accounts.Sum(a => a.Balance));
-        }
+    public Task<decimal> GetTotalBalanceAsync()
+    {
+        var accounts = _dbContext.Set<Account>();
+        return Task.FromResult(accounts.Sum(a => a.Balance));
     }
 }
